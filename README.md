@@ -7,14 +7,14 @@ coming soon...
 ## Electron
 [![npm](https://img.shields.io/npm/v/jazz-midi-electron.svg)](https://www.npmjs.com/package/jazz-midi-electron)
 
-## Chrome & Opera
+## Chrome, Opera, Microsoft Edge (Chromium)
 https://chrome.google.com/webstore/detail/jazz-midi/jhdoobfdaejmldnpihidjemjcbpfmbkm
 
 ## Firefox
 https://addons.mozilla.org/en-US/firefox/addon/jazz-midi
 
 ## Safari
-Coming soon...
+Work in progress...
 
-## Microsoft Edge
+## Microsoft Edge Legacy
 Coming soon...

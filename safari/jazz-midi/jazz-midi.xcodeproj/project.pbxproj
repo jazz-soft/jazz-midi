@@ -1,0 +1,504 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A2E9974323F3CD0000C284E6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2E9974223F3CD0000C284E6 /* AppDelegate.swift */; };
+		A2E9974523F3CD0000C284E6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A2E9974423F3CD0000C284E6 /* Assets.xcassets */; };
+		A2E9974823F3CD0000C284E6 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = A2E9974623F3CD0000C284E6 /* MainMenu.xib */; };
+		A2E9975723F3CD7300C284E6 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2E9975623F3CD7300C284E6 /* Cocoa.framework */; };
+		A2E9975A23F3CD7300C284E6 /* SafariExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2E9975923F3CD7300C284E6 /* SafariExtensionHandler.swift */; };
+		A2E9975C23F3CD7300C284E6 /* SafariExtensionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2E9975B23F3CD7300C284E6 /* SafariExtensionViewController.swift */; };
+		A2E9975F23F3CD7300C284E6 /* SafariExtensionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A2E9975D23F3CD7300C284E6 /* SafariExtensionViewController.xib */; };
+		A2E9976423F3CD7400C284E6 /* ToolbarItemIcon.pdf in Resources */ = {isa = PBXBuildFile; fileRef = A2E9976323F3CD7400C284E6 /* ToolbarItemIcon.pdf */; };
+		A2E9976823F3CD7400C284E6 /* extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = A2E9975423F3CD7300C284E6 /* extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		A2E9976E23F3CDAF00C284E6 /* content.js in Resources */ = {isa = PBXBuildFile; fileRef = A2E9976D23F3CDAF00C284E6 /* content.js */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A2E9976623F3CD7400C284E6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A2E9973723F3CD0000C284E6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A2E9975323F3CD7300C284E6;
+			remoteInfo = extension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		A2E9976C23F3CD7400C284E6 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				A2E9976823F3CD7400C284E6 /* extension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		A2E9973F23F3CD0000C284E6 /* jazz-midi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "jazz-midi.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A2E9974223F3CD0000C284E6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		A2E9974423F3CD0000C284E6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A2E9974723F3CD0000C284E6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		A2E9974923F3CD0000C284E6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A2E9974A23F3CD0000C284E6 /* jazz_midi.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = jazz_midi.entitlements; sourceTree = "<group>"; };
+		A2E9975423F3CD7300C284E6 /* extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = extension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		A2E9975623F3CD7300C284E6 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		A2E9975923F3CD7300C284E6 /* SafariExtensionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariExtensionHandler.swift; sourceTree = "<group>"; };
+		A2E9975B23F3CD7300C284E6 /* SafariExtensionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariExtensionViewController.swift; sourceTree = "<group>"; };
+		A2E9975E23F3CD7300C284E6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/SafariExtensionViewController.xib; sourceTree = "<group>"; };
+		A2E9976023F3CD7400C284E6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A2E9976323F3CD7400C284E6 /* ToolbarItemIcon.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = ToolbarItemIcon.pdf; sourceTree = "<group>"; };
+		A2E9976523F3CD7400C284E6 /* extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = extension.entitlements; sourceTree = "<group>"; };
+		A2E9976D23F3CDAF00C284E6 /* content.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = content.js; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A2E9973C23F3CD0000C284E6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A2E9975123F3CD7300C284E6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A2E9975723F3CD7300C284E6 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A2E9973623F3CD0000C284E6 = {
+			isa = PBXGroup;
+			children = (
+				A2E9974123F3CD0000C284E6 /* jazz-midi */,
+				A2E9975823F3CD7300C284E6 /* extension */,
+				A2E9975523F3CD7300C284E6 /* Frameworks */,
+				A2E9974023F3CD0000C284E6 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A2E9974023F3CD0000C284E6 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A2E9973F23F3CD0000C284E6 /* jazz-midi.app */,
+				A2E9975423F3CD7300C284E6 /* extension.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A2E9974123F3CD0000C284E6 /* jazz-midi */ = {
+			isa = PBXGroup;
+			children = (
+				A2E9974223F3CD0000C284E6 /* AppDelegate.swift */,
+				A2E9974423F3CD0000C284E6 /* Assets.xcassets */,
+				A2E9974623F3CD0000C284E6 /* MainMenu.xib */,
+				A2E9974923F3CD0000C284E6 /* Info.plist */,
+				A2E9974A23F3CD0000C284E6 /* jazz_midi.entitlements */,
+			);
+			path = "jazz-midi";
+			sourceTree = "<group>";
+		};
+		A2E9975523F3CD7300C284E6 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A2E9975623F3CD7300C284E6 /* Cocoa.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A2E9975823F3CD7300C284E6 /* extension */ = {
+			isa = PBXGroup;
+			children = (
+				A2E9976D23F3CDAF00C284E6 /* content.js */,
+				A2E9975923F3CD7300C284E6 /* SafariExtensionHandler.swift */,
+				A2E9975B23F3CD7300C284E6 /* SafariExtensionViewController.swift */,
+				A2E9975D23F3CD7300C284E6 /* SafariExtensionViewController.xib */,
+				A2E9976023F3CD7400C284E6 /* Info.plist */,
+				A2E9976323F3CD7400C284E6 /* ToolbarItemIcon.pdf */,
+				A2E9976523F3CD7400C284E6 /* extension.entitlements */,
+			);
+			path = extension;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A2E9973E23F3CD0000C284E6 /* jazz-midi */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A2E9974D23F3CD0000C284E6 /* Build configuration list for PBXNativeTarget "jazz-midi" */;
+			buildPhases = (
+				A2E9973B23F3CD0000C284E6 /* Sources */,
+				A2E9973C23F3CD0000C284E6 /* Frameworks */,
+				A2E9973D23F3CD0000C284E6 /* Resources */,
+				A2E9976C23F3CD7400C284E6 /* Embed App Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A2E9976723F3CD7400C284E6 /* PBXTargetDependency */,
+			);
+			name = "jazz-midi";
+			productName = "jazz-midi";
+			productReference = A2E9973F23F3CD0000C284E6 /* jazz-midi.app */;
+			productType = "com.apple.product-type.application";
+		};
+		A2E9975323F3CD7300C284E6 /* extension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A2E9976923F3CD7400C284E6 /* Build configuration list for PBXNativeTarget "extension" */;
+			buildPhases = (
+				A2E9975023F3CD7300C284E6 /* Sources */,
+				A2E9975123F3CD7300C284E6 /* Frameworks */,
+				A2E9975223F3CD7300C284E6 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = extension;
+			productName = extension;
+			productReference = A2E9975423F3CD7300C284E6 /* extension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A2E9973723F3CD0000C284E6 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1010;
+				LastUpgradeCheck = 1010;
+				ORGANIZATIONNAME = "Jazz-Soft";
+				TargetAttributes = {
+					A2E9973E23F3CD0000C284E6 = {
+						CreatedOnToolsVersion = 10.1;
+					};
+					A2E9975323F3CD7300C284E6 = {
+						CreatedOnToolsVersion = 10.1;
+					};
+				};
+			};
+			buildConfigurationList = A2E9973A23F3CD0000C284E6 /* Build configuration list for PBXProject "jazz-midi" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A2E9973623F3CD0000C284E6;
+			productRefGroup = A2E9974023F3CD0000C284E6 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A2E9973E23F3CD0000C284E6 /* jazz-midi */,
+				A2E9975323F3CD7300C284E6 /* extension */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A2E9973D23F3CD0000C284E6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A2E9974523F3CD0000C284E6 /* Assets.xcassets in Resources */,
+				A2E9974823F3CD0000C284E6 /* MainMenu.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A2E9975223F3CD7300C284E6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A2E9976E23F3CDAF00C284E6 /* content.js in Resources */,
+				A2E9976423F3CD7400C284E6 /* ToolbarItemIcon.pdf in Resources */,
+				A2E9975F23F3CD7300C284E6 /* SafariExtensionViewController.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A2E9973B23F3CD0000C284E6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A2E9974323F3CD0000C284E6 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A2E9975023F3CD7300C284E6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A2E9975C23F3CD7300C284E6 /* SafariExtensionViewController.swift in Sources */,
+				A2E9975A23F3CD7300C284E6 /* SafariExtensionHandler.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A2E9976723F3CD7400C284E6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A2E9975323F3CD7300C284E6 /* extension */;
+			targetProxy = A2E9976623F3CD7400C284E6 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		A2E9974623F3CD0000C284E6 /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A2E9974723F3CD0000C284E6 /* Base */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+		A2E9975D23F3CD7300C284E6 /* SafariExtensionViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A2E9975E23F3CD7300C284E6 /* Base */,
+			);
+			name = SafariExtensionViewController.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		A2E9974B23F3CD0000C284E6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		A2E9974C23F3CD0000C284E6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		A2E9974E23F3CD0000C284E6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "jazz-midi/jazz_midi.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "jazz-midi/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "Jazz-Soft.jazz-midi";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+			};
+			name = Debug;
+		};
+		A2E9974F23F3CD0000C284E6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "jazz-midi/jazz_midi.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "jazz-midi/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "Jazz-Soft.jazz-midi";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+			};
+			name = Release;
+		};
+		A2E9976A23F3CD7400C284E6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = extension/extension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = extension/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "Jazz-Soft.jazz-midi.extension";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.2;
+			};
+			name = Debug;
+		};
+		A2E9976B23F3CD7400C284E6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = extension/extension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = extension/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "Jazz-Soft.jazz-midi.extension";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.2;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A2E9973A23F3CD0000C284E6 /* Build configuration list for PBXProject "jazz-midi" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A2E9974B23F3CD0000C284E6 /* Debug */,
+				A2E9974C23F3CD0000C284E6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A2E9974D23F3CD0000C284E6 /* Build configuration list for PBXNativeTarget "jazz-midi" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A2E9974E23F3CD0000C284E6 /* Debug */,
+				A2E9974F23F3CD0000C284E6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A2E9976923F3CD7400C284E6 /* Build configuration list for PBXNativeTarget "extension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A2E9976A23F3CD7400C284E6 /* Debug */,
+				A2E9976B23F3CD7400C284E6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A2E9973723F3CD0000C284E6 /* Project object */;
+}

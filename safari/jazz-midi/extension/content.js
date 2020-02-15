@@ -16,6 +16,7 @@ function createPort() {
 }
 
 document.addEventListener('jazz-midi', function(e) {
+console.log("### received jazz-midi message:", e.detail);
   if (!e.detail) document.dispatchEvent(new Event('jazz-midi-msg'));
   if (!exchange) {
     exchange = document.createElement('div');
@@ -33,3 +34,5 @@ document.addEventListener('jazz-midi', function(e) {
   if (v[0] !== 'refresh' && v[0] !== 'watch' && v[0] !== 'unwatch') n = v.splice(1, 1);
   if (ports[n]) ports[n].postMessage(v);
 });
+
+console.log("### jazz-midi extension loaded!");

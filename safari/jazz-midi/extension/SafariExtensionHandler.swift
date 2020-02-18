@@ -6,5 +6,6 @@ class SafariExtensionHandler: SFSafariExtensionHandler {
         page.getPropertiesWithCompletionHandler { properties in
             NSLog("The extension received a message (\(messageName)) from a script injected into (\(String(describing: properties?.url))) with userInfo (\(userInfo ?? [:]))")
         }
+        page.dispatchMessageToScript(withName: "jazz-midi-ext", userInfo: ["data" : [1, 2, 3]])    
     }
 }

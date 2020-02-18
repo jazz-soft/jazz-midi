@@ -1,19 +1,19 @@
-var ports = [];
+var ver = '1.0';
+var ports = 0;
 var exchange;
 
-function createPort() {
-  var port = chrome.runtime.connect();
-  var id = ports.length;
-  port.onDisconnect.addListener(function() {
-    document.dispatchEvent(new Event('jazz-midi-msg'));
-  });
-  port.onMessage.addListener(function(v) {
-    if (v[0] !== 'refresh') v.splice(1, 0, id);
-    exchange.innerText += JSON.stringify(v) + '\n';
-    document.dispatchEvent(new Event('jazz-midi-msg'));
-  });
-  ports.push(port);
+function publish(data) {
+  exchange.innerText += JSON.stringify(data) + '\n';
+  document.dispatchEvent(new Event('jazz-midi-msg'));
 }
+
+function delayed(data) {
+  setTimeout(function() { publish(data); }, 0);
+}
+
+safari.self.addEventListener('jazz-midi-ext', function(e) {
+  console.log('received from extension:', e);
+});
 
 document.addEventListener('jazz-midi', function(e) {
 console.log("### received jazz-midi message:", e.detail);
@@ -21,18 +21,22 @@ console.log("### received jazz-midi message:", e.detail);
   if (!exchange) {
     exchange = document.createElement('div');
     exchange.id = 'jazz-midi-msg';
-    //exchange.style.visibility = 'hidden';
     document.body.appendChild(exchange);
-    createPort();
   }
-  if (!e.detail) return;
+  if (!e.detail) {
+    delayed(['version', 0, ver]);
+    return;
+  }
   var n = 0;
   var v = e.detail.slice();
   if (v[0] === 'new') {
-    createPort(); return;
+    ports++;
+    delayed(['version', ports, ver]);
+    return;
   }
-  if (v[0] !== 'refresh' && v[0] !== 'watch' && v[0] !== 'unwatch') n = v.splice(1, 1);
-  if (ports[n]) ports[n].postMessage(v);
+  console.log("### sending data to the extension:", v);
+  safari.extension.dispatchMessage("data", { "data": v });
+  console.log("### -");
 });
 
-console.log("### jazz-midi extension loaded!");
+console.log("### jazz-midi extension loaded!!!");

@@ -1,11 +1,10 @@
 import SafariServices
 
 class SafariExtensionHandler: SFSafariExtensionHandler {
-    override func messageReceived(withName messageName: String, from page: SFSafariPage, userInfo: [String : Any]?) {
-        // This method will be called when a content script provided by your extension calls safari.extension.dispatchMessage("message").
+  override func messageReceived(withName messageName: String, from page: SFSafariPage, userInfo: [String : Any]?) {
         page.getPropertiesWithCompletionHandler { properties in
-            NSLog("The extension received a message (\(messageName)) from a script injected into (\(String(describing: properties?.url))) with userInfo (\(userInfo ?? [:]))")
+          NSLog("Received: \(messageName) from: \(String(describing: properties?.url)) data: \(userInfo ?? [:])")
+          page.dispatchMessageToScript(withName: "", userInfo: ["data" : ["refresh", ""]])
         }
-        page.dispatchMessageToScript(withName: "jazz-midi-ext", userInfo: ["data" : [1, 2, 3]])    
     }
 }

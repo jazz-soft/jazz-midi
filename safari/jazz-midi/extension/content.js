@@ -11,8 +11,9 @@ function delayed(data) {
   setTimeout(function() { publish(data); }, 0);
 }
 
-safari.self.addEventListener('jazz-midi-ext', function(e) {
-  console.log('received from extension:', e);
+safari.self.addEventListener('message', function(e) {
+  console.log("### received from extension:", e.message.data);
+  publish(e.message.data);
 });
 
 document.addEventListener('jazz-midi', function(e) {
@@ -27,16 +28,13 @@ console.log("### received jazz-midi message:", e.detail);
     delayed(['version', 0, ver]);
     return;
   }
-  var n = 0;
   var v = e.detail.slice();
   if (v[0] === 'new') {
     ports++;
     delayed(['version', ports, ver]);
     return;
   }
-  console.log("### sending data to the extension:", v);
-  safari.extension.dispatchMessage("data", { "data": v });
-  console.log("### -");
+  safari.extension.dispatchMessage(v[0], { "data": v.slice(1) });
 });
 
 console.log("### jazz-midi extension loaded!!!");

@@ -1,0 +1,9 @@
+{
+  "name": "jazz-midi",
+  "version": "0.0.0",
+  "description": "Low level MIDI support in browsers",
+  "devDependencies": {
+    "midi-test": "^1.0.9"
+  },
+  "private": true
+}

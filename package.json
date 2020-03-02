@@ -2,8 +2,11 @@
   "name": "jazz-midi",
   "version": "0.0.0",
   "description": "Low level MIDI support in browsers",
+  "scripts": {
+    "test": "node test.js"
+  },
   "devDependencies": {
-    "midi-test": "^1.0.9"
+    "midi-test": "^1.1.0"
   },
   "private": true
 }

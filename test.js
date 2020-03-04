@@ -12,6 +12,12 @@ const rl = require('readline').createInterface({
   input: process.stdin,
   output: process.stdout
 });
+rl.on('SIGINT', function() {
+  console.log('Thank you!');
+  src.disconnect();
+  dst.disconnect();
+  rl.close();
+});
 rl.on('line', function(input) {
   var msg = parse(input.trim());
   if (msg) {
@@ -25,7 +31,7 @@ rl.prompt();
 dst.receive = function(msg) { console.log('MIDI received:', format(msg)); };
 
 function format(msg) {
-  return msg;
+  return msg.map(function(x) { return x < 16 ? '0' + x.toString(16) : x.toString(16); }).join(' ');
 }
 
 function parse(input) {

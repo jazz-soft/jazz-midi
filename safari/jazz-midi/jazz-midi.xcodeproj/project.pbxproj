@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A2290D492410D45800D9F502 /* Midi.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2290D482410D45800D9F502 /* Midi.swift */; };
 		A231233923F7CB5F002A533C /* content.js in Resources */ = {isa = PBXBuildFile; fileRef = A231233823F7CB5F002A533C /* content.js */; };
 		A2E9974323F3CD0000C284E6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2E9974223F3CD0000C284E6 /* AppDelegate.swift */; };
 		A2E9974523F3CD0000C284E6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A2E9974423F3CD0000C284E6 /* Assets.xcassets */; };
@@ -41,6 +42,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		A2290D482410D45800D9F502 /* Midi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Midi.swift; sourceTree = "<group>"; };
 		A231233823F7CB5F002A533C /* content.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = content.js; sourceTree = "<group>"; };
 		A2E9973F23F3CD0000C284E6 /* jazz-midi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "jazz-midi.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A2E9974223F3CD0000C284E6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -120,6 +122,7 @@
 				A2E9975923F3CD7300C284E6 /* SafariExtensionHandler.swift */,
 				A2E9976023F3CD7400C284E6 /* Info.plist */,
 				A2E9976523F3CD7400C284E6 /* extension.entitlements */,
+				A2290D482410D45800D9F502 /* Midi.swift */,
 			);
 			path = extension;
 			sourceTree = "<group>";
@@ -233,6 +236,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A2290D492410D45800D9F502 /* Midi.swift in Sources */,
 				A2E9975A23F3CD7300C284E6 /* SafariExtensionHandler.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

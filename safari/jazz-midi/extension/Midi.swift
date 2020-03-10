@@ -75,6 +75,8 @@ class MidiOutDLS : MidiOut {
 
 class Midi {
 
+  let DLS = "Apple DLS Synth"
+
   static func getDeviceInfo(_ device : MIDIEndpointRef) -> [String : String] {
     var info : [String : String] = [:]
     var S : Unmanaged<CFString>?

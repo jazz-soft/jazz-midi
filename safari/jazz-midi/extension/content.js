@@ -17,7 +17,7 @@ safari.self.addEventListener('message', function(e) {
 });
 
 document.addEventListener('jazz-midi', function(e) {
-console.log("### received jazz-midi message:", e.detail);
+  console.log("### received jazz-midi message:", e.detail);
   if (!e.detail) document.dispatchEvent(new Event('jazz-midi-msg'));
   if (!exchange) {
     exchange = document.createElement('div');
@@ -37,4 +37,8 @@ console.log("### received jazz-midi message:", e.detail);
   safari.extension.dispatchMessage(v[0], { "data": v.slice(1) });
 });
 
-console.log("### jazz-midi extension loaded!!!");
+window.addEventListener('unload', function(e) {
+  safari.extension.dispatchMessage("unload");
+});
+
+//console.log("### jazz-midi extension loaded!!!");

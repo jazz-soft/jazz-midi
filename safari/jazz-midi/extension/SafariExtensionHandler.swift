@@ -2,6 +2,28 @@ import SafariServices
 
 var port : MidiOut?
 
+class PageData {
+  static var pages : [(SFSafariPage, PageData)] = []
+  
+  static func find(page: SFSafariPage, create: Bool = false) -> PageData? {
+    for var tpl in pages {
+      if tpl.0 == page {
+        return tpl.1
+      }
+    }
+    if !create {
+      return nil
+    }
+    let pdata = PageData()
+    pages.append((page, pdata))
+    return pdata
+  }
+  
+  static func openin(page: SFSafariPage, slot: UInt, name: String) {
+  
+  }
+}
+
 class SafariExtensionHandler: SFSafariExtensionHandler {
   override func messageReceived(withName messageName: String, from page: SFSafariPage, userInfo: [String : Any]?) {
     page.getPropertiesWithCompletionHandler { properties in

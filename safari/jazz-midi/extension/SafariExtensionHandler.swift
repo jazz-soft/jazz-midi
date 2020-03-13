@@ -2,7 +2,9 @@ import SafariServices
 
 class PageData {
   private static var pages : [(SFSafariPage, PageData)] = []
-  
+  private var outputs : [UInt : MidiOut] = [:]
+  private var inputs : [UInt : MidiIn] = [:]
+
   static func find(_ page: SFSafariPage, _ create: Bool = false) -> PageData? {
     if let tpl = pages.first(where: { $0.0 == page }) {
       return tpl.1
@@ -24,19 +26,45 @@ class PageData {
   }
 
   func openout(_ slot: UInt, _ name: String) -> String {
-    return ""
+    if let str = outputs[slot]?.name() {
+      if (str == name) {
+        return name;
+      }
+    }
+    if let port = Midi.openMidiOut(name) {
+      outputs[slot] = port
+    }
+    if let str = outputs[slot]?.name() {
+      return str;
+    }
+    else {
+      return ""
+    }
   }
 
   func openin(_ slot: UInt, _ name: String) -> String {
-    return ""
+    if let str = inputs[slot]?.name() {
+      if (str == name) {
+        return name;
+      }
+    }
+    if let port = Midi.openMidiIn(name) {
+      inputs[slot] = port
+    }
+    if let str = inputs[slot]?.name() {
+      return str;
+    }
+    else {
+      return ""
+    }
   }
 
   func closeout(_ slot: UInt) {
-
+    outputs.removeValue(forKey: slot)
   }
 
   func closein(_ slot: UInt) {
-
+    inputs.removeValue(forKey: slot)
   }
 
 }

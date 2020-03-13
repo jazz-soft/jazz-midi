@@ -2,7 +2,12 @@ import Foundation
 import AudioToolbox
 
 protocol MidiOut {
-    func send(_ : [UInt8])
+  func name() -> String
+  func send(_ : [UInt8])
+}
+
+protocol MidiIn {
+  func name() -> String
 }
 
 class MidiOutDLS : MidiOut {
@@ -67,6 +72,8 @@ class MidiOutDLS : MidiOut {
     DisposeAUGraph(graph!)
   }
 
+  func name() -> String { return Midi.DLS }
+
   func send(_ data: [UInt8]) {
     MusicDeviceMIDIEvent(synth!, UInt32(data[0]), UInt32(data[1]), UInt32(data[2]), 0)
   }
@@ -75,7 +82,7 @@ class MidiOutDLS : MidiOut {
 
 class Midi {
 
-  let DLS = "Apple DLS Synth"
+  static let DLS = "Apple DLS Synth"
 
   static func getDeviceInfo(_ device : MIDIEndpointRef) -> [String : String] {
     var info : [String : String] = [:]
@@ -101,7 +108,7 @@ class Midi {
     }
     return info
   }
-  
+
   static func refresh() -> [String : [[String: String]]] {
     var inputs : [[String : String]] = [];
     var outputs : [[String : String]] = [["name" : "Apple DLS Synth", "manufacturer" : "Apple", "version" : "1.0"]];
@@ -117,5 +124,16 @@ class Midi {
     }
     return ["ins": inputs, "outs" : outputs];
   }
-  
+
+  static func openMidiOut(_ name: String) -> MidiOut? {
+    if name == DLS {
+      return MidiOutDLS()
+    }
+    return nil
+  }
+
+  static func openMidiIn(_ name: String) -> MidiIn? {
+    return nil
+  }
+
 }

@@ -75,7 +75,12 @@ class MidiOutDLS : MidiOut {
   func name() -> String { return Midi.DLS }
 
   func send(_ data: [UInt8]) {
-    MusicDeviceMIDIEvent(synth!, UInt32(data[0]), UInt32(data[1]), UInt32(data[2]), 0)
+    if data.count > 3 {
+      MusicDeviceSysEx(synth!, data, UInt32(data.count))
+    }
+    else {
+      MusicDeviceMIDIEvent(synth!, UInt32(data[0]), data.count > 1 ? UInt32(data[1]) : 0, data.count > 2 ? UInt32(data[2]) : 0, 0)
+    }
   }
 
 }

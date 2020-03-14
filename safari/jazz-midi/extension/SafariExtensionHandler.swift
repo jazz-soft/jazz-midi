@@ -22,7 +22,7 @@ class PageData {
   }
   
   func send(_ slot: UInt, _ data: [UInt8]) {
-
+    outputs[slot]?.send(data)
   }
 
   func openout(_ slot: UInt, _ name: String) -> String {
@@ -74,7 +74,6 @@ class SafariExtensionHandler: SFSafariExtensionHandler {
     page.getPropertiesWithCompletionHandler { properties in
         //NSLog("Received: \(messageName) from: \(String(describing: properties?.url)) data: \(userInfo ?? [:])")
       if messageName == "unload" {
-        NSLog("Unloading page: \(properties?.url)");
         PageData.remove(page)
       }
       else if messageName == "refresh" {

@@ -3,7 +3,7 @@ import AudioToolbox
 
 protocol MidiOut {
   func name() -> String
-  func send(_ : [UInt8])
+  func send(_: [UInt8])
 }
 
 protocol MidiIn {
@@ -11,11 +11,11 @@ protocol MidiIn {
 }
 
 class MidiOutDLS : MidiOut {
-  private var graph : AUGraph?
-  private var synthNode : AUNode = 0;
-  private var outNode : AUNode = 0;
-  private var synth : AudioUnit?
-  private var out : AudioUnit?
+  private var graph: AUGraph?
+  private var synthNode: AUNode = 0;
+  private var outNode: AUNode = 0;
+  private var synth: AudioUnit?
+  private var out: AudioUnit?
 
   init?() {
     NewAUGraph(&graph)
@@ -85,6 +85,57 @@ class MidiOutDLS : MidiOut {
 
 }
 
+class MidiOutImpl {
+  static var ports: [String: MidiOutImpl] = [:]
+  let port: MIDIPortRef
+  let dest: MIDIEndpointRef
+  var refcount: UInt
+  
+  init?() {
+  
+  }
+
+  deinit {
+  
+  }
+
+}
+
+class MidiOutHW : MidiOut {
+  let portname: String
+  let port: MidiOutImpl
+
+  init?(_ name: String) {
+    portname = name
+    if let impl = MidiOutImpl.ports[name] {
+      port = impl
+      port.refcount += 1
+    }
+    else if impl = MidiOutImpl() {
+    
+    }
+    else {
+      return nil
+    }
+  }
+
+  deinit {
+  
+  }
+
+  func name() -> String { return portname }
+
+  func send(_ data: [UInt8]) {
+    let size = data.count + 64
+    let packetList = UnsafeMutablePointer<MIDIPacketList>.allocate(capacity: size)
+    let packet = MIDIPacketListInit(packetList);
+    MIDIPacketListAdd(packetList, size, packet, 0, data.count, data);
+    MIDISend(port.port, port.dest, packetList);
+    packetList.deallocate()
+  }
+
+}
+
 class Midi {
 
   static let DLS = "Apple DLS Synth"
@@ -134,7 +185,7 @@ class Midi {
     if name == DLS {
       return MidiOutDLS()
     }
-    return nil
+    return MidiOutHW(name)
   }
 
   static func openMidiIn(_ name: String) -> MidiIn? {

@@ -1,6 +1,16 @@
 import Foundation
 import AudioToolbox
 
+var clientRef: MIDIObjectRef? = nil
+
+func midiCLient() -> MIDIClientRef {
+  if clientRef == nil {
+    clientRef = MIDIClientRef()
+    MIDIClientCreate("MIDI" as CFString, nil, nil, &clientRef!)
+  }
+  return clientRef!
+}
+
 protocol MidiOut {
   func name() -> String
   func send(_: [UInt8])
@@ -12,18 +22,17 @@ protocol MidiIn {
 
 class MidiOutDLS : MidiOut {
   private var graph: AUGraph?
-  private var synthNode: AUNode = 0;
-  private var outNode: AUNode = 0;
+  private var synthNode: AUNode = 0
+  private var outNode: AUNode = 0
   private var synth: AudioUnit?
   private var out: AudioUnit?
 
   init?() {
     NewAUGraph(&graph)
-    if (graph == nil) {
-      //print("Cannot create AUGraph");
+    if graph == nil {
       return nil
     }
-    var status : OSStatus = 0;
+    var status : OSStatus = 0
     var cd = AudioComponentDescription(
       componentType: kAudioUnitType_MusicDevice,
       componentSubType: kAudioUnitSubType_DLSSynth,
@@ -32,39 +41,33 @@ class MidiOutDLS : MidiOut {
       componentFlagsMask: 0
     )
     status = AUGraphAddNode(graph!, &cd, &synthNode)
-    if (status != 0) {
-      //print("Cannot create synth node: \(status)");
+    if status != 0 {
       return nil
     }
-    cd.componentType = kAudioUnitType_Output;
-    cd.componentSubType = kAudioUnitSubType_DefaultOutput;
-    status = AUGraphAddNode(graph!, &cd, &outNode);
-    if (status != 0) {
-      //print("Cannot create output node: \(status)");
+    cd.componentType = kAudioUnitType_Output
+    cd.componentSubType = kAudioUnitSubType_DefaultOutput
+    status = AUGraphAddNode(graph!, &cd, &outNode)
+    if status != 0 {
       return nil
     }
-    status = AUGraphOpen(graph!);
-    if (status != 0) {
-      //print("Cannot open AUGraph: \(status)");
+    status = AUGraphOpen(graph!)
+    if status != 0 {
       return nil
     }
-    status = AUGraphConnectNodeInput(graph!, synthNode, 0, outNode, 0);
-    if (status != 0) {
-      //print("Cannot connect nodes: \(status)");
+    status = AUGraphConnectNodeInput(graph!, synthNode, 0, outNode, 0)
+    if status != 0 {
       return nil
     }
-    status = AUGraphInitialize(graph!);
-    if (status != 0) {
-      //print("Cannot initialize AUGraph: \(status)");
+    status = AUGraphInitialize(graph!)
+    if status != 0 {
       return nil
     }
-    status = AUGraphStart(graph!);
-    if (status != 0) {
-      //print("Cannot start AUGraph: \(status)");
+    status = AUGraphStart(graph!)
+    if status != 0 {
       return nil
     }
-    AUGraphNodeInfo(graph!, synthNode, nil, &synth);
-    AUGraphNodeInfo(graph!, outNode, nil, &out);
+    AUGraphNodeInfo(graph!, synthNode, nil, &synth)
+    AUGraphNodeInfo(graph!, outNode, nil, &out)
   }
 
   deinit {
@@ -87,16 +90,21 @@ class MidiOutDLS : MidiOut {
 
 class MidiOutImpl {
   static var ports: [String: MidiOutImpl] = [:]
-  let port: MIDIPortRef
+
+  var port: MIDIPortRef
   let dest: MIDIEndpointRef
   var refcount: UInt
   
-  init?() {
-  
+  init?(_ name: String) {
+    dest = MIDIGetDestination(0)
+    port = MIDIPortRef()
+    MIDIOutputPortCreate(midiCLient(), "port" as CFString, &port)
+    refcount = 0
+    MidiOutImpl.ports[name] = self
   }
 
   deinit {
-  
+    MIDIPortDispose(port)
   }
 
 }
@@ -111,8 +119,9 @@ class MidiOutHW : MidiOut {
       port = impl
       port.refcount += 1
     }
-    else if impl = MidiOutImpl() {
-    
+    else if let impl = MidiOutImpl(name) {
+      port = impl
+      port.refcount += 1
     }
     else {
       return nil
@@ -120,7 +129,10 @@ class MidiOutHW : MidiOut {
   }
 
   deinit {
-  
+    port.refcount -= 1
+    if port.refcount == 0 {
+      MidiOutImpl.ports.removeValue(forKey: portname)
+    }
   }
 
   func name() -> String { return portname }
@@ -128,9 +140,9 @@ class MidiOutHW : MidiOut {
   func send(_ data: [UInt8]) {
     let size = data.count + 64
     let packetList = UnsafeMutablePointer<MIDIPacketList>.allocate(capacity: size)
-    let packet = MIDIPacketListInit(packetList);
-    MIDIPacketListAdd(packetList, size, packet, 0, data.count, data);
-    MIDISend(port.port, port.dest, packetList);
+    let packet = MIDIPacketListInit(packetList)
+    MIDIPacketListAdd(packetList, size, packet, 0, data.count, data)
+    MIDISend(port.port, port.dest, packetList)
     packetList.deallocate()
   }
 
@@ -140,9 +152,9 @@ class Midi {
 
   static let DLS = "Apple DLS Synth"
 
-  static func getDeviceInfo(_ device : MIDIEndpointRef) -> [String : String] {
-    var info : [String : String] = [:]
-    var S : Unmanaged<CFString>?
+  static func getDeviceInfo(_ device: MIDIEndpointRef) -> [String: String] {
+    var info: [String: String] = [:]
+    var S: Unmanaged<CFString>?
     MIDIObjectGetStringProperty(device, kMIDIPropertyDisplayName, &S)
     if let str = S {
       info["name"] = String(str.takeUnretainedValue())
@@ -165,9 +177,9 @@ class Midi {
     return info
   }
 
-  static func refresh() -> [String : [[String: String]]] {
-    var inputs : [[String : String]] = [];
-    var outputs : [[String : String]] = [["name" : "Apple DLS Synth", "manufacturer" : "Apple", "version" : "1.0"]];
+  static func refresh() -> [String: [[String: String]]] {
+    var inputs: [[String: String]] = [];
+    var outputs: [[String: String]] = [["name": "Apple DLS Synth", "manufacturer": "Apple", "version": "1.0"]];
     let n_dst = MIDIGetNumberOfDestinations()
     let n_src = MIDIGetNumberOfSources()
     for var i in 0 ..< n_src {
@@ -178,7 +190,7 @@ class Midi {
       let device = MIDIGetDestination(i)
       outputs.append(getDeviceInfo(device))
     }
-    return ["ins": inputs, "outs" : outputs];
+    return ["ins": inputs, "outs" : outputs]
   }
 
   static func openMidiOut(_ name: String) -> MidiOut? {

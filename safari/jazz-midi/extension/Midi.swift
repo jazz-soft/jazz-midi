@@ -109,6 +109,32 @@ class MidiOutImpl {
 
 }
 
+func midiproc(_ pktlist: UnsafePointer<MIDIPacketList>, _ readProcRefCon: UnsafeMutableRawPointer?, _ srcConnRefCon: UnsafeMutableRawPointer?) -> Void {
+  NSLog("MIDI-In: \(pktlist)");
+}
+
+class MidiInImpl {
+  static var ports: [String: MidiInImpl] = [:]
+
+  var subscribers: [MidiInHW]
+  var port: MIDIPortRef
+  let src: MIDIEndpointRef
+
+  init?(_ name: String) {
+    subscribers = []
+    src = MIDIGetSource(0)
+    port = MIDIPortRef()
+    MIDIInputPortCreate(midiCLient(), "port" as CFString, midiproc, nil, &port)
+    MIDIPortConnectSource(port, src, nil);
+    MidiInImpl.ports[name] = self
+  }
+
+  deinit {
+    MIDIPortDispose(port)
+  }
+
+}
+
 class MidiOutHW : MidiOut {
   let portname: String
   let port: MidiOutImpl
@@ -145,6 +171,38 @@ class MidiOutHW : MidiOut {
     MIDISend(port.port, port.dest, packetList)
     packetList.deallocate()
   }
+
+}
+
+class MidiInHW : MidiIn {
+  let portname: String
+  let port: MidiInImpl
+  let subscriber: MidiSubscriber
+
+  init?(_ name: String, _ sub: MidiSubscriber) {
+    portname = name
+    subscriber = sub
+    if let impl = MidiInImpl.ports[name] {
+      port = impl
+      port.subscribers.append(self)
+    }
+    else if let impl = MidiInImpl(name) {
+      port = impl
+      port.subscribers.append(self)
+    }
+    else {
+      return nil
+    }
+  }
+
+  deinit {
+    port.subscribers.removeAll(where: { $0 === self })
+    if port.subscribers.count == 0 {
+      MidiInImpl.ports.removeValue(forKey: portname)
+    }
+  }
+
+  func name() -> String { return portname }
 
 }
 
@@ -200,8 +258,8 @@ class Midi {
     return MidiOutHW(name)
   }
 
-  static func openMidiIn(_ name: String) -> MidiIn? {
-    return nil
+  static func openMidiIn(_ name: String, _ sub: MidiSubscriber) -> MidiIn? {
+    return MidiInHW(name, sub)
   }
 
 }

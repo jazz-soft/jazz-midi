@@ -2,6 +2,7 @@ import SafariServices
 
 class PageData {
   private static var pages : [(SFSafariPage, PageData)] = []
+  private var thepage: SFSafariPage
   private var outputs : [UInt : MidiOut] = [:]
   private var inputs : [UInt : MidiIn] = [:]
 
@@ -12,13 +13,17 @@ class PageData {
     if !create {
       return nil
     }
-    let inst = PageData()
+    let inst = PageData(page)
     pages.append((page, inst))
     return inst
   }
 
   static func remove(_ page: SFSafariPage) {
     pages.removeAll(where: { $0.0 == page })
+  }
+  
+  init(_ page: SFSafariPage) {
+    thepage = page
   }
   
   func send(_ slot: UInt, _ data: [UInt8]) {
@@ -48,7 +53,7 @@ class PageData {
         return name;
       }
     }
-    if let port = Midi.openMidiIn(name) {
+    if let port = Midi.openMidiIn(name, MidiSubscriber(thepage, slot)) {
       inputs[slot] = port
     }
     if let str = inputs[slot]?.name() {
@@ -65,6 +70,20 @@ class PageData {
 
   func closein(_ slot: UInt) {
     inputs.removeValue(forKey: slot)
+  }
+
+}
+
+class MidiSubscriber {
+  let page: SFSafariPage
+  let slot: UInt
+  init(_ p: SFSafariPage, _ n: UInt) {
+    page = p
+    slot = n
+  }
+  
+  func onMidi(_ data: [UInt8]) {
+  
   }
 
 }

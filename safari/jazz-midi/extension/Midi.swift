@@ -110,7 +110,20 @@ class MidiOutImpl {
 }
 
 func midiproc(_ pktlist: UnsafePointer<MIDIPacketList>, _ readProcRefCon: UnsafeMutableRawPointer?, _ srcConnRefCon: UnsafeMutableRawPointer?) -> Void {
-  NSLog("MIDI-In: \(pktlist)");
+  NSLog("MIDI-In data received")
+  //var subs = readProcRefCon!.load(as: MidiInImpl.self).subscribers
+  var packets = pktlist.pointee.packet
+  var packet = UnsafeMutablePointer<MIDIPacket>(&packets)
+
+  for _ in 0 ..< pktlist.pointee.numPackets {
+    var data = packet.pointee.data
+    let msg = [UInt8](UnsafeBufferPointer(start: &data.0, count: Int(packet.pointee.length)))
+    NSLog("MIDI-In: \(msg)")
+    //for i in 0 ..< subs.count {
+    //  subs[i].subscriber.onMidi(msg)
+    //}
+    packet = MIDIPacketNext(packet)
+  }
 }
 
 class MidiInImpl {
@@ -124,7 +137,8 @@ class MidiInImpl {
     subscribers = []
     src = MIDIGetSource(0)
     port = MIDIPortRef()
-    MIDIInputPortCreate(midiCLient(), "port" as CFString, midiproc, nil, &port)
+    var myself = self
+    MIDIInputPortCreate(midiCLient(), "port" as CFString, midiproc, &myself, &port)
     MIDIPortConnectSource(port, src, nil);
     MidiInImpl.ports[name] = self
   }
@@ -240,11 +254,11 @@ class Midi {
     var outputs: [[String: String]] = [["name": "Apple DLS Synth", "manufacturer": "Apple", "version": "1.0"]];
     let n_dst = MIDIGetNumberOfDestinations()
     let n_src = MIDIGetNumberOfSources()
-    for var i in 0 ..< n_src {
+    for i in 0 ..< n_src {
       let device = MIDIGetSource(i)
       inputs.append(getDeviceInfo(device))
     }
-    for var i in 0 ..< n_dst {
+    for i in 0 ..< n_dst {
       let device = MIDIGetDestination(i)
       outputs.append(getDeviceInfo(device))
     }

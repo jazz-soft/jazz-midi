@@ -83,7 +83,7 @@ class MidiSubscriber {
   }
   
   func onMidi(_ data: [UInt8]) {
-  
+    NSLog("SUB: \(slot) \(data)")
   }
 
 }

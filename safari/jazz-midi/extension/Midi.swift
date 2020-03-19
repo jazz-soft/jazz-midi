@@ -93,14 +93,27 @@ class MidiOutImpl {
 
   var port: MIDIPortRef
   let dest: MIDIEndpointRef
-  var refcount: UInt
+  var refcount: UInt = 0
   
   init?(_ name: String) {
-    dest = MIDIGetDestination(0)
-    port = MIDIPortRef()
-    MIDIOutputPortCreate(midiCLient(), "port" as CFString, &port)
-    refcount = 0
-    MidiOutImpl.ports[name] = self
+    var s: Unmanaged<CFString>?
+    let m = MIDIGetNumberOfDestinations()
+    for i in 0 ..< m {
+      let device = MIDIGetDestination(i)
+      MIDIObjectGetStringProperty(device, kMIDIPropertyDisplayName, &s)
+      if let str = s {
+        if String(str.takeUnretainedValue()) == name {
+          dest = device
+          port = MIDIPortRef()
+          if MIDIOutputPortCreate(midiCLient(), "port" as CFString, &port) != 0 {
+            return nil
+          }
+          MidiOutImpl.ports[name] = self
+          return
+        }
+      }
+    }
+    return nil
   }
 
   deinit {
@@ -128,17 +141,32 @@ func midiproc(_ pktlist: UnsafePointer<MIDIPacketList>, _ readProcRefCon: Unsafe
 class MidiInImpl {
   static var ports: [String: MidiInImpl] = [:]
 
-  var subscribers: [MidiInHW]
+  var subscribers: [MidiInHW] = []
   var port: MIDIPortRef
   let src: MIDIEndpointRef
 
   init?(_ name: String) {
-    subscribers = []
-    src = MIDIGetSource(0)
-    port = MIDIPortRef()
-    MIDIInputPortCreate(midiCLient(), "port" as CFString, midiproc, Unmanaged.passUnretained(self).toOpaque(), &port)
-    MIDIPortConnectSource(port, src, nil);
-    MidiInImpl.ports[name] = self
+    var s: Unmanaged<CFString>?
+    let m = MIDIGetNumberOfSources()
+    for i in 0 ..< m {
+      let device = MIDIGetSource(i)
+      MIDIObjectGetStringProperty(device, kMIDIPropertyDisplayName, &s)
+      if let str = s {
+        if String(str.takeUnretainedValue()) == name {
+          src = device
+          port = MIDIPortRef()
+          if MIDIInputPortCreate(midiCLient(), "port" as CFString, midiproc, Unmanaged.passUnretained(self).toOpaque(), &port) != 0 {
+            return nil
+          }
+          if MIDIPortConnectSource(port, src, nil) != 0 {
+            return nil
+          }
+          MidiInImpl.ports[name] = self
+          return
+        }
+      }
+    }
+    return nil
   }
 
   deinit {
@@ -236,7 +264,7 @@ class Midi {
     else {
       info["manufacturer"] = "Unknown"
     }
-    var N : Int32 = 0;
+    var N : Int32 = 0
     MIDIObjectGetIntegerProperty(device, kMIDIPropertyDriverVersion, &N)
     if N == 0 || N >= 256 {
       info["version"] = "\(N >> 8).\(N & 0xff)"
@@ -248,8 +276,8 @@ class Midi {
   }
 
   static func refresh() -> [String: [[String: String]]] {
-    var inputs: [[String: String]] = [];
-    var outputs: [[String: String]] = [["name": "Apple DLS Synth", "manufacturer": "Apple", "version": "1.0"]];
+    var inputs: [[String: String]] = []
+    var outputs: [[String: String]] = [["name": "Apple DLS Synth", "manufacturer": "Apple", "version": "1.0"]]
     let n_dst = MIDIGetNumberOfDestinations()
     let n_src = MIDIGetNumberOfSources()
     for i in 0 ..< n_src {

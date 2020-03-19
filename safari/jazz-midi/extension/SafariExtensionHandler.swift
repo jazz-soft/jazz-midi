@@ -71,7 +71,6 @@ class PageData {
   func closein(_ slot: UInt) {
     inputs.removeValue(forKey: slot)
   }
-
 }
 
 class MidiSubscriber {
@@ -82,16 +81,15 @@ class MidiSubscriber {
     slot = n
   }
   
-  func onMidi(_ data: [UInt8]) {
-    NSLog("SUB: \(slot) \(data)")
+  func onMidi(_ midi: [UInt8]) {
+    let data: [Any] = ["midi", slot, 0] + midi
+    page.dispatchMessageToScript(withName: "", userInfo: ["data" : data])
   }
-
 }
 
 class SafariExtensionHandler: SFSafariExtensionHandler {
   override func messageReceived(withName messageName: String, from page: SFSafariPage, userInfo: [String : Any]?) {
     page.getPropertiesWithCompletionHandler { properties in
-        //NSLog("Received: \(messageName) from: \(String(describing: properties?.url)) data: \(userInfo ?? [:])")
       if messageName == "unload" {
         PageData.remove(page)
       }
@@ -101,7 +99,6 @@ class SafariExtensionHandler: SFSafariExtensionHandler {
       else if var data = userInfo?["data"] as? [Any] {
         let slot = data[0] as! UInt
         data.remove(at: 0)
-        NSLog("\(messageName) \(slot) : \(data)")
         if messageName == "play" {
           PageData.find(page)?.send(slot, data.map { $0 as! UInt8 })
         }
@@ -122,5 +119,4 @@ class SafariExtensionHandler: SFSafariExtensionHandler {
       }
     }
   }
-
 }

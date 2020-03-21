@@ -23,6 +23,7 @@ document.addEventListener('jazz-midi', function(e) {
     exchange = document.createElement('div');
     exchange.id = 'jazz-midi-msg';
     document.body.appendChild(exchange);
+    setInterval(function() { safari.extension.dispatchMessage("tick"); }, 5000);
   }
   if (!e.detail) {
     delayed(['version', 0, ver]);

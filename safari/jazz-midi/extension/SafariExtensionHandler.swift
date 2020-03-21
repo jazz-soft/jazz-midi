@@ -93,6 +93,9 @@ class SafariExtensionHandler: SFSafariExtensionHandler {
       if messageName == "unload" {
         PageData.remove(page)
       }
+      //else if messageName == "tick" {
+      //  NSLog("tick")
+      //}
       else if messageName == "refresh" {
         page.dispatchMessageToScript(withName: "", userInfo: ["data" : ["refresh", Midi.refresh()]])
       }

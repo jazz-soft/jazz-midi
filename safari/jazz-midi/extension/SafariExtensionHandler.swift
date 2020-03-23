@@ -1,29 +1,34 @@
 import SafariServices
 
 class PageData {
-  private static var pages : [(SFSafariPage, PageData)] = []
-  private var thepage: SFSafariPage
-  private var outputs : [UInt : MidiOut] = [:]
-  private var inputs : [UInt : MidiIn] = [:]
+  private static var pages: [UInt: PageData] = [:]
+  private static var count: UInt = 0
+  private let id: UInt
+  private var page: SFSafariPage
+  private var date: Date
+  private var outputs: [UInt: MidiOut] = [:]
+  private var inputs: [UInt: MidiIn] = [:]
 
-  static func find(_ page: SFSafariPage, _ create: Bool = false) -> PageData? {
-    if let tpl = pages.first(where: { $0.0 == page }) {
-      return tpl.1
+  static func update(_ n: UInt, _ p: SFSafariPage) {
+    let now = Date()
+    if let pg = pages[n] {
+      pg.date = now
+      pg.page = p
+      //NSLog("TICK: \(now.timeIntervalSince(tpl.2))")
     }
-    if !create {
-      return nil
-    }
-    let inst = PageData(page)
-    pages.append((page, inst))
-    return inst
-  }
-
-  static func remove(_ page: SFSafariPage) {
-    pages.removeAll(where: { $0.0 == page })
+    //pages.removeAll(where: { now.timeIntervalSince($0.date) > 10 })
   }
   
-  init(_ page: SFSafariPage) {
-    thepage = page
+  static func find(_ id: UInt) -> PageData {
+    return pages[id]!
+  }
+  
+  init(_ p: SFSafariPage) {
+    PageData.count += 1
+    id = PageData.count
+    page = p
+    date = Date()
+    PageData.pages[id] = self
   }
   
   func send(_ slot: UInt, _ data: [UInt8]) {
@@ -53,7 +58,7 @@ class PageData {
         return name;
       }
     }
-    if let port = Midi.openMidiIn(name, MidiSubscriber(thepage, slot)) {
+    if let port = Midi.openMidiIn(name, MidiSubscriber(page, slot)) {
       inputs[slot] = port
     }
     if let str = inputs[slot]?.name() {
@@ -90,34 +95,42 @@ class MidiSubscriber {
 class SafariExtensionHandler: SFSafariExtensionHandler {
   override func messageReceived(withName messageName: String, from page: SFSafariPage, userInfo: [String : Any]?) {
     page.getPropertiesWithCompletionHandler { properties in
-      if messageName == "unload" {
-        PageData.remove(page)
-      }
-      //else if messageName == "tick" {
-      //  NSLog("tick")
-      //}
-      else if messageName == "refresh" {
-        page.dispatchMessageToScript(withName: "", userInfo: ["data" : ["refresh", Midi.refresh()]])
-      }
-      else if var data = userInfo?["data"] as? [Any] {
-        let slot = data[0] as! UInt
-        data.remove(at: 0)
-        if messageName == "play" {
-          PageData.find(page)?.send(slot, data.map { $0 as! UInt8 })
+      if var data = userInfo?["data"] as? [Any] {
+        var id: UInt = 0
+        var slot: UInt = 0
+        if data.count > 0 {
+          id = data[0] as! UInt
+          data.remove(at: 0)
         }
-        else if messageName == "openout" {
-          let name = PageData.find(page, true)!.openout(slot, data[0] as! String)
-          page.dispatchMessageToScript(withName: "", userInfo: ["data" : ["openout", slot, name]])
+        if data.count > 0 {
+          slot = data[0] as! UInt
+          data.remove(at: 0)
         }
-        else if messageName == "openin" {
-          let name = PageData.find(page, true)!.openin(slot, data[0] as! String)
-          page.dispatchMessageToScript(withName: "", userInfo: ["data" : ["openin", slot, name]])
+        if id == 0 {
+          _ = PageData(page)
         }
-        else if messageName == "closeout" {
-          PageData.find(page)?.closeout(slot)
-        }
-        else if messageName == "closein" {
-          PageData.find(page)?.closein(slot)
+        else {
+          PageData.update(id, page)
+          if messageName == "refresh" {
+            page.dispatchMessageToScript(withName: "", userInfo: ["data" : ["refresh", Midi.refresh()]])
+          }
+          else if messageName == "play" {
+            PageData.find(id).send(slot, data.map { $0 as! UInt8 })
+          }
+          else if messageName == "openout" {
+            let name = PageData.find(id).openout(slot, data[0] as! String)
+            page.dispatchMessageToScript(withName: "", userInfo: ["data" : ["openout", slot, name]])
+          }
+          else if messageName == "openin" {
+            let name = PageData.find(id).openin(slot, data[0] as! String)
+            page.dispatchMessageToScript(withName: "", userInfo: ["data" : ["openin", slot, name]])
+          }
+          else if messageName == "closeout" {
+            PageData.find(id).closeout(slot)
+          }
+          else if messageName == "closein" {
+            PageData.find(id).closein(slot)
+          }
         }
       }
     }

@@ -37,9 +37,3 @@ document.addEventListener('jazz-midi', function(e) {
   }
   safari.extension.dispatchMessage(v[0], { "data": v.slice(1) });
 });
-
-window.addEventListener('unload', function(e) {
-  safari.extension.dispatchMessage("unload");
-});
-
-//console.log("### jazz-midi extension loaded!!!");

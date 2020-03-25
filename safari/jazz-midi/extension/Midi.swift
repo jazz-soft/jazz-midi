@@ -26,6 +26,7 @@ class MidiOutDLS : MidiOut {
   private var outNode: AUNode = 0
   private var synth: AudioUnit?
   private var out: AudioUnit?
+  private let splitter = Midi1()
 
   init?() {
     NewAUGraph(&graph)
@@ -78,14 +79,16 @@ class MidiOutDLS : MidiOut {
   func name() -> String { return Midi.DLS }
 
   func send(_ data: [UInt8]) {
-    if data.count > 3 {
-      MusicDeviceSysEx(synth!, data, UInt32(data.count))
-    }
-    else {
-      MusicDeviceMIDIEvent(synth!, UInt32(data[0]), data.count > 1 ? UInt32(data[1]) : 0, data.count > 2 ? UInt32(data[2]) : 0, 0)
+    splitter.write(data)
+    while let msg = splitter.read() {
+      if msg.count > 3 {
+        MusicDeviceSysEx(synth!, msg, UInt32(data.count))
+      }
+      else {
+        MusicDeviceMIDIEvent(synth!, UInt32(msg[0]), msg.count > 1 ? UInt32(msg[1]) : 0, msg.count > 2 ? UInt32(msg[2]) : 0, 0)
+      }
     }
   }
-
 }
 
 class MidiOutImpl {
@@ -119,7 +122,6 @@ class MidiOutImpl {
   deinit {
     MIDIPortDispose(port)
   }
-
 }
 
 func midiproc(_ pktlist: UnsafePointer<MIDIPacketList>, _ readProcRefCon: UnsafeMutableRawPointer?, _ srcConnRefCon: UnsafeMutableRawPointer?) -> Void {
@@ -172,7 +174,6 @@ class MidiInImpl {
   deinit {
     MIDIPortDispose(port)
   }
-
 }
 
 class MidiOutHW : MidiOut {
@@ -211,7 +212,6 @@ class MidiOutHW : MidiOut {
     MIDISend(port.port, port.dest, packetList)
     packetList.deallocate()
   }
-
 }
 
 class MidiInHW : MidiIn {
@@ -243,11 +243,64 @@ class MidiInHW : MidiIn {
   }
 
   func name() -> String { return portname }
+}
 
+class Midi1 {
+  private var data: [UInt8] = []
+  
+  static func len(_ c: UInt8) -> Int {
+    switch c & 0xf0 {
+      case 0x80, 0x90, 0xA0, 0xB0, 0xE0:
+        return 3
+      case 0xC0, 0xD0:
+        return 2
+      default:
+        switch c {
+          case 0xF2:
+            return 3
+          case 0xF1, 0xF3:
+            return 2
+          default:
+            return 1
+        }
+    }
+  }
+  
+  func write(_ msg: [UInt8]) {
+    data.append(contentsOf: msg)
+  }
+  
+  func read() -> [UInt8]? {
+    while data.count > 0 && (data[0] < 0x80 || data[0] == 0xf7) {
+      data.remove(at: 0)
+    }
+    if data.count > 0 {
+      if data[0] == 0xf0 {
+        for i in 1 ..< data.count {
+          if data[i] == 0xf7 {
+            let msg = Array(data[0 ... i])
+            data.removeSubrange(0 ... i)
+            return msg
+          }
+        }
+      }
+      else if data.count >= Midi1.len(data[0]) {
+        for i in 1 ..< Midi1.len(data[0]) {
+          if data[i] >= 0x80 {
+            return nil
+          }
+          let msg = Array(data[0 ..< Midi1.len(data[0])])
+          data.removeSubrange(0 ..< Midi1.len(data[0]))
+          return msg
+        }
+      }
+      return data
+    }
+    return nil
+  }
 }
 
 class Midi {
-
   static let DLS = "Apple DLS Synth"
 
   static func getDeviceInfo(_ device: MIDIEndpointRef) -> [String: String] {
@@ -301,5 +354,4 @@ class Midi {
   static func openMidiIn(_ name: String, _ sub: MidiSubscriber) -> MidiIn? {
     return MidiInHW(name, sub)
   }
-
 }

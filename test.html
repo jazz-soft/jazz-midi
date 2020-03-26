@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>MIDI test</title>
+<script src="https://cdn.jsdelivr.net/npm/jzz"></script>
+<script src="https://cdn.jsdelivr.net/npm/jzz-synth-tiny"></script>
+</head>
+
+<body>
+<h1>MIDI test</h1>
+
+<p>
+MIDI Out: <select id=selectmidiout></select>
+</p><p>
+Send MIDI (e.g. <tt>90 40 7f</tt>):
+<input id=textinput></input>
+<span id=reportspan></span>
+</p>
+
+<script><!--
+var selectMidiOut = document.getElementById('selectmidiout');
+var textInput = document.getElementById('textinput');
+var reportSpan = document.getElementById('reportspan');
+var midiOutName = 'Not available';
+var midiOutPort;
+
+function setListbox(lb, s) {
+  for (var i = 0; i < lb.options.length; i++) if (lb.options[i].value == s) lb.options[i].selected = 1;
+}
+
+function onMidiOutSuccess() {
+  if (midiOutPort) {
+    midiOutPort.close();
+  }
+  midiOutPort = this;
+  midiOutName = this.name();
+  setListbox(selectMidiOut, midiOutName);
+}
+
+function onMidiOutFail() {
+  if (midiOutPort) through.connect(midiOutPort);
+  setListbox(selectMidiOut, midiOutName);
+}
+
+JZZ.synth.Tiny.register('Web Audio');
+
+JZZ().and(function(){
+  var i;
+  for (i = 0; i < this.info().outputs.length; i++) {
+    selectMidiOut[i] = new Option(this.info().outputs[i].name);
+  }
+  if (!i) {
+    selectMidiOut[i] = new Option('Not available');
+  }
+});
+
+JZZ().openMidiOut().or(onMidiOutFail).and(onMidiOutSuccess);
+
+function changeMidiOut() {
+  var name = selectMidiOut.options[selectMidiOut.selectedIndex].value;
+  if (name == midiOutName) return;
+  JZZ().openMidiOut(name).or(onMidiOutFail).and(onMidiOutSuccess);
+}
+
+function changeInput(e) {
+  if (e.which == 13) {
+    reportSpan.innerHTML = '';
+    try {
+      var msg = parse(textInput.value.trim());
+      if (msg) {
+        textInput.value = '';
+        if (midiOutPort) midiOutPort.send(msg);
+      }
+    }
+    catch (s) {
+      reportSpan.innerHTML = s.replace(/&/, '&amp;').replace(/</, '&lt;').replace(/>/, '&gt;');
+    }
+  }
+}
+
+function parse(input) {
+  if (!input) return;
+  var arr = input.split(/\s+/);
+  if (!arr.length) return;
+  var msg = [];
+  for (var i = 0; i < arr.length; i++) {
+    var x = parseInt(arr[i], 16);
+    if (isNaN(x) || x < 0 || x > 255 || arr[i].search(/[^0-9A-Fa-f]/) != -1) {
+      throw('Bad MIDI value: ' + arr[i]);
+    }
+    msg.push(x);
+  }
+  return msg;
+}
+
+selectMidiOut.addEventListener('change', changeMidiOut);
+textInput.addEventListener('keypress', changeInput);
+
+--></script>
+
+</body>
+</html>

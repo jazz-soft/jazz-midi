@@ -43,7 +43,6 @@ function onMidiOutSuccess() {
 }
 
 function onMidiOutFail() {
-  if (midiOutPort) through.connect(midiOutPort);
   setListbox(selectMidiOut, midiOutName);
 }
 

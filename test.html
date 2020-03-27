@@ -57,9 +57,18 @@ JZZ().and(function(){
   if (!i) {
     selectMidiOut[i] = new Option('Not available');
   }
+  for (i = 0; i < this.info().inputs.length; i++) {
+    openMidiIn(this.info().inputs[i].name);
+  }
 });
 
 JZZ().openMidiOut().or(onMidiOutFail).and(onMidiOutSuccess);
+
+function openMidiIn(name) {
+  JZZ().openMidiIn(name).connect(function(msg) {
+    print(name + ' => ' + format(msg));
+  });
+}
 
 function changeMidiOut() {
   var name = selectMidiOut.options[selectMidiOut.selectedIndex].value;
@@ -72,8 +81,8 @@ function changeInput(e) {
     reportSpan.innerHTML = '';
     try {
       var msg = parse(textInput.value.trim());
-      var str = format(msg);
       if (msg) {
+        var str = format(msg);
         textInput.value = '';
         ptr = -1;
         if (!previous.length || previous[previous.length - 1] != str) previous.push(str);
@@ -84,6 +93,10 @@ function changeInput(e) {
     catch (s) {
       reportSpan.innerHTML = s.toString().replace(/&/, '&amp;').replace(/</, '&lt;').replace(/>/, '&gt;');
     }
+  }
+  else if (e.keyCode == 27) {
+    ptr = -1;
+    textInput.value = '';
   }
   else if (e.keyCode == 38) {
     if (previous.length) {

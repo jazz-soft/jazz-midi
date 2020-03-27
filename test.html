@@ -16,13 +16,18 @@ Send MIDI (e.g. <tt>90 40 7f</tt>):
 <input id=textinput></input>
 <span id=reportspan></span>
 </p>
+<pre id=textoutput></pre>
 
 <script><!--
 var selectMidiOut = document.getElementById('selectmidiout');
 var textInput = document.getElementById('textinput');
+var textOutput = document.getElementById('textoutput');
 var reportSpan = document.getElementById('reportspan');
 var midiOutName = 'Not available';
 var midiOutPort;
+var output = [];
+var previous = ['90 40 7f'];
+var ptr = -1;
 
 function setListbox(lb, s) {
   for (var i = 0; i < lb.options.length; i++) if (lb.options[i].value == s) lb.options[i].selected = 1;
@@ -67,13 +72,30 @@ function changeInput(e) {
     reportSpan.innerHTML = '';
     try {
       var msg = parse(textInput.value.trim());
+      var str = format(msg);
       if (msg) {
         textInput.value = '';
+        ptr = -1;
+        if (!previous.length || previous[previous.length - 1] != str) previous.push(str);
+        print(midiOutName + ' <= ' + str);
         if (midiOutPort) midiOutPort.send(msg);
       }
     }
     catch (s) {
-      reportSpan.innerHTML = s.replace(/&/, '&amp;').replace(/</, '&lt;').replace(/>/, '&gt;');
+      reportSpan.innerHTML = s.toString().replace(/&/, '&amp;').replace(/</, '&lt;').replace(/>/, '&gt;');
+    }
+  }
+  else if (e.keyCode == 38) {
+    if (previous.length) {
+      if (ptr == -1) ptr = previous.length;
+      if (ptr) ptr--;
+      textInput.value = previous[ptr];
+    }
+  }
+  else if (e.keyCode == 40) {
+    if (previous.length && ptr != -1) {
+      if (ptr < previous.length - 1) ptr++;
+      textInput.value = previous[ptr];
     }
   }
 }
@@ -93,8 +115,18 @@ function parse(input) {
   return msg;
 }
 
+function format(msg) {
+  return msg.map(function(x) { return x < 16 ? '0' + x.toString(16) : x.toString(16); }).join(' ');
+}
+
+function print(str) {
+  output.push(str.replace(/&/, '&amp;').replace(/</, '&lt;').replace(/>/, '&gt;'));
+  while (output.length > 10) output.shift(); 
+  textOutput.innerHTML = output.join('<br>');
+}
+
 selectMidiOut.addEventListener('change', changeMidiOut);
-textInput.addEventListener('keypress', changeInput);
+textInput.addEventListener('keydown', changeInput);
 
 --></script>
 

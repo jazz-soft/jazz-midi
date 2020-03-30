@@ -294,7 +294,7 @@ class Midi1 {
           return msg
         }
       }
-      return data
+      return nil
     }
     return nil
   }

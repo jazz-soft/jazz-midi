@@ -126,16 +126,13 @@ class MidiOutImpl {
 
 func midiproc(_ pktlist: UnsafePointer<MIDIPacketList>, _ readProcRefCon: UnsafeMutableRawPointer?, _ srcConnRefCon: UnsafeMutableRawPointer?) -> Void {
   let impl: MidiInImpl = Unmanaged.fromOpaque(readProcRefCon!).takeUnretainedValue()
-  let subs = impl.subscribers
   var packets = pktlist.pointee.packet
   var packet = UnsafeMutablePointer<MIDIPacket>(&packets)
 
   for _ in 0 ..< pktlist.pointee.numPackets {
     var data = packet.pointee.data
     let msg = [UInt8](UnsafeBufferPointer(start: &data.0, count: Int(packet.pointee.length)))
-    for i in 0 ..< subs.count {
-      subs[i].subscriber.onMidi(msg)
-    }
+      impl.receive(msg)
     packet = MIDIPacketNext(packet)
   }
 }
@@ -143,6 +140,7 @@ func midiproc(_ pktlist: UnsafePointer<MIDIPacketList>, _ readProcRefCon: Unsafe
 class MidiInImpl {
   static var ports: [String: MidiInImpl] = [:]
 
+  private let splitter = Midi1()
   var subscribers: [MidiInHW] = []
   var port: MIDIPortRef
   let src: MIDIEndpointRef
@@ -173,6 +171,15 @@ class MidiInImpl {
 
   deinit {
     MIDIPortDispose(port)
+  }
+  
+  func receive(_ data: [UInt8]) {
+    splitter.write(data)
+    while let msg = splitter.read() {
+      for i in 0 ..< subscribers.count {
+        subscribers[i].subscriber.onMidi(msg)
+      }
+    }
   }
 }
 

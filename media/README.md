@@ -2,6 +2,8 @@
 
 [**en (English)**](en.md)  
 
+[Privacy Policy](PRIVACY.md)  
+
 ## Images
 
 #### icon48.png

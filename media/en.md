@@ -8,6 +8,14 @@ MIDI support for browsers
 
 ## Description (Mozilla Add-ons)
 MIDI stands for Musical Instrument Digital Interface.
-This add-on will allow the third-party web pages (using our free JZZ.js library) communicate with software synthesizers and musical instruments connected to the user's computer.
+
+This extension will allow web pages communicate with the software synth and musical instruments connected to your computer.
 
 See also: Web MIDI API extension.
+
+## Description (Apple App Store)
+MIDI stands for Musical Instrument Digital Interface.
+
+This extension will allow web pages communicate with the software synth and musical instruments connected to your computer.
+
+Please visit https://github.com/jazz-soft/jazz-midi to view the source code and leave your feedback.

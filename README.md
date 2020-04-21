@@ -1,5 +1,5 @@
 # jazz-midi
-coming soon...
+MIDI support for Node.js and browsers
 
 ## Node.js
 [![npm](https://img.shields.io/npm/v/jazz-midi.svg)](https://www.npmjs.com/package/jazz-midi)
@@ -14,7 +14,7 @@ https://chrome.google.com/webstore/detail/jazz-midi/jhdoobfdaejmldnpihidjemjcbpf
 https://addons.mozilla.org/en-US/firefox/addon/jazz-midi
 
 ## Safari
-Work in progress...
+https://apps.apple.com/us/app/jazz-midi/id1506447231
 
 ## Microsoft Edge Legacy
 Coming soon...

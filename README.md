@@ -1,6 +1,8 @@
 # jazz-midi
 MIDI support for Node.js and browsers
 
+See also: [Web MIDI API](https://github.com/jazz-soft/web-midi)
+
 ## Node.js
 [![npm](https://img.shields.io/npm/v/jazz-midi.svg)](https://www.npmjs.com/package/jazz-midi)
 

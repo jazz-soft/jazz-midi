@@ -2,6 +2,7 @@
   "manifest_version": 2,
   "name": "Jazz-MIDI",
   "description": "MIDI support for browsers",
+  "author": "Jazz-Soft",
   "version": "1.0.1.1",
   "icons": {
     "48": "icon48.png",

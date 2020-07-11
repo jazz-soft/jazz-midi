@@ -12,7 +12,7 @@
 <p>
 MIDI Out: <select id=selectmidiout></select>
 </p><p>
-Send MIDI (e.g. <tt>90 40 7f</tt>):
+Send MIDI (e.g. <tt>c0 10, 90 40 7f</tt>):
 <input id=textinput></input>
 <span id=reportspan></span>
 </p>
@@ -78,15 +78,20 @@ function changeMidiOut() {
 function changeInput(e) {
   if (e.which == 13) {
     reportSpan.innerHTML = '';
+    var i;
     try {
-      var msg = parse(textInput.value.trim());
-      if (msg) {
-        var str = format(msg);
-        textInput.value = '';
-        ptr = -1;
-        if (!previous.length || previous[previous.length - 1] != str) previous.push(str);
-        print(midiOutName + ' <= ' + str);
-        if (midiOutPort) midiOutPort.send(msg);
+      var group = parse(textInput.value.trim());
+      textInput.value = '';
+      ptr = -1;
+      var str = '';
+      for (i = 0; i < group.length; i++) {
+        if (str.length) str += ',';
+        str += format(group[i]);
+      }
+      if (!previous.length || previous[previous.length - 1] != str) previous.push(str);
+      for (i = 0; i < group.length; i++) {
+        print(midiOutName + ' <= ' + format(group[i]));
+        if (midiOutPort) midiOutPort.send(group[i]);
       }
     }
     catch (s) {
@@ -114,17 +119,24 @@ function changeInput(e) {
 
 function parse(input) {
   if (!input) return;
-  var arr = input.split(/\s+/);
-  if (!arr.length) return;
-  var msg = [];
-  for (var i = 0; i < arr.length; i++) {
-    var x = parseInt(arr[i], 16);
-    if (isNaN(x) || x < 0 || x > 255 || arr[i].search(/[^0-9A-Fa-f]/) != -1) {
-      throw('Bad MIDI value: ' + arr[i]);
+  var i, j, chunk, msg, x;
+  var group = [];
+  var data = input.split(/,\s*/);
+  for (i = 0; i < data.length; i++) {
+    if (data[i] == '') continue;
+    chunk = data[i].split(/\s+/);
+    if (!chunk.length) continue;
+    msg = [];
+    for (j = 0; j < chunk.length; j++) {
+      x = parseInt(chunk[j], 16);
+      if (x >= 0 && x <= 255) msg.push(x);
+      else {
+        throw('Invalid hex MIDI value:', chunk[j]);
+      }
     }
-    msg.push(x);
+    if (msg.length) group.push(msg);
   }
-  return msg;
+  return group;
 }
 
 function format(msg) {

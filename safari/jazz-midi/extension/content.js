@@ -33,7 +33,7 @@ document.addEventListener('jazz-midi', function(e) {
     exchange.id = 'jazz-midi-msg';
     document.body.appendChild(exchange);
     safari.extension.dispatchMessage("init", { "data": [0] });
-    setInterval(function() { safari.extension.dispatchMessage("tick", { data: [page] }); }, 2000);
+    setInterval(function() { safari.extension.dispatchMessage("tick", { data: [page] }); }, 500);
   }
   if (page) {
     var v = e.detail.slice();

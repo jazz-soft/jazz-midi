@@ -85,7 +85,7 @@ function changeInput(e) {
       ptr = -1;
       var str = '';
       for (i = 0; i < group.length; i++) {
-        if (str.length) str += ',';
+        if (str.length) str += ', ';
         str += format(group[i]);
       }
       if (!previous.length || previous[previous.length - 1] != str) previous.push(str);

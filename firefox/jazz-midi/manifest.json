@@ -3,7 +3,7 @@
   "name": "Jazz-MIDI",
   "description": "MIDI support for browsers",
   "author": "Jazz-Soft",
-  "version": "1.0.1.1",
+  "version": "1.0.2.0",
   "icons": {
     "48": "icon48.png",
     "128": "icon128.png"
@@ -24,6 +24,6 @@
       "strict_min_version": "50.0"
     }
   },
-  "content_scripts": [{"matches": ["<all_urls>"], "js": ["content.js"], "run_at": "document_start"}],
+  "content_scripts": [{"matches": ["<all_urls>"], "js": ["content.js"], "all_frames": true, "run_at": "document_start"}],
   "homepage_url": "https://jazz-soft.net"
 }

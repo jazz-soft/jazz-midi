@@ -17,6 +17,3 @@ https://addons.mozilla.org/en-US/firefox/addon/jazz-midi
 
 ## Safari
 https://apps.apple.com/us/app/jazz-midi/id1506447231
-
-## Microsoft Edge Legacy
-Coming soon...

@@ -1,0 +1,15 @@
+{
+  "name": "jazz-midi-dev",
+  "version": "0.0.0",
+  "description": "jazz-midi development",
+  "main": "build/Release/jazz.node",
+  "scripts": {
+    "test": "node test && mocha"
+  },
+  "devDependencies": {
+    "midi-test": "^1.1.4",
+    "mocha": "^8.2.1"
+  },
+  "gypfile": true,
+  "private": true
+}

@@ -1,7 +1,7 @@
 {
-  "name": "jazz-midi",
+  "name": "jazz-midi-repo",
   "version": "0.0.0",
-  "description": "Low level MIDI support in browsers",
+  "description": "Low level MIDI support in Node.js and browsers",
   "scripts": {
     "test": "node test.js"
   },

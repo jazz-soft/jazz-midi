@@ -1,4 +1,4 @@
-var jazz = require('../jazz-midi');
+var jazz = require('.');
 console.log('Node.js version:', process.versions.node);
 console.log('Package version:', jazz.package.version);
 console.log('Jazz-MIDI version:', jazz.version);

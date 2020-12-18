@@ -1,0 +1,18 @@
+{
+  "name": "jazz-midi",
+  "version": "1.7.3",
+  "description": "Low-level MIDI support for Node.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "keywords": [
+    "midi",
+    "music",
+    "sound"
+  ],
+  "author": "jazz-soft (https://jazz-soft.net)",
+  "homepage": "https://jazz-soft.net",
+  "bugs": "https://jazz-soft.org",
+  "license":"MIT"
+}

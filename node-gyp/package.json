@@ -1,7 +1,7 @@
 {
-  "name": "jazz-midi-dev",
+  "name": "jazz-midi-binary",
   "version": "0.0.0",
-  "description": "jazz-midi development",
+  "description": "jazz-midi binary",
   "main": "build/Release/jazz.node",
   "scripts": {
     "test": "node test && mocha"

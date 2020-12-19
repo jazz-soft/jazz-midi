@@ -9,7 +9,7 @@
 
 using namespace std;
 
-CMidi* CMidi::CreateMidi(void*p){ return new CMidiALSA(p);}
+CMidi* CMidi::CreateMidi(void*p) { return new CMidiALSA(p); }
 
 str_type CAlsaEntry::Name() const
 {
@@ -298,7 +298,7 @@ void* CMidiInHW::MidiInThread(void* p)
 void CMidiInHW::ReadMidiInput(void* data, std::vector<unsigned char>& v)
 {
     std::vector<unsigned char>*d=(std::vector<unsigned char>*)data;
-    for(int i=0;i<(*d).size();i++) v.push_back((*d)[i]);
+    for (int i = 0; i < (*d).size(); i++) v.push_back((*d)[i]);
     delete d;
 }
 
@@ -371,6 +371,6 @@ struct ThreadParam
 };
 
 
-void* ThreadWrapper(void* p){ ThreadParam* tp=(ThreadParam*)p; tp->func(tp->ptr); delete tp; return 0;}
-void CMidiALSA::StartThread(void(*func)(CMidi*)){ pthread_t t; pthread_create(&t, 0, ThreadWrapper, new ThreadParam(func,this));}
-void CMidiALSA::Sleep(int ms){ usleep(ms);}
+void* ThreadWrapper(void* p) { ThreadParam* tp=(ThreadParam*)p; tp->func(tp->ptr); delete tp; return 0; }
+void CMidiALSA::StartThread(void(*func)(CMidi*)) { pthread_t t; pthread_create(&t, 0, ThreadWrapper, new ThreadParam(func,this)); }
+void CMidiALSA::Sleep(int ms) { usleep(ms); }

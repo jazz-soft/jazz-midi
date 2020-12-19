@@ -55,7 +55,7 @@ CMidiOutSW::~CMidiOutSW()
 
 CMidiOutHW::~CMidiOutHW()
 {
-    if(port) MIDIPortDispose(port);
+    if (port) MIDIPortDispose(port);
 }
 
 
@@ -91,10 +91,10 @@ bool CMidiOutHW::MidiOutMsg(const std::basic_string<unsigned char>& data)
 bool CMidiOutSW::MidiOutMsg(const std::basic_string<unsigned char>& data)
 {
     bool ret = false;
-    if(data.length() < 4) {
+    if (data.length() < 4) {
         ret |= (!MusicDeviceMIDIEvent(synth, data[0], data.length() > 1? data[1] : 0, data.length() > 2 ? data[2] : 0, 0));
     }
-    else if(data.length() == 8 && data[0] == 0xF0 && data[1] == 0x7F && data[2] == 0x7F && data[3] == 0x04 && data[4] == 0x01 && data[7] == 0xF7) {
+    else if (data.length() == 8 && data[0] == 0xF0 && data[1] == 0x7F && data[2] == 0x7F && data[3] == 0x04 && data[4] == 0x01 && data[7] == 0xF7) {
         // Set volume SysEx
         unsigned x = data[6]; x <<= 7; x += data[5];
         double y = x; y /= 0x3fff;
@@ -145,7 +145,7 @@ std::vector<str_type> CMidiMacOSX::MidiInList()
     std::vector<str_type> v;
     CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true);
     ItemCount k = MIDIGetNumberOfSources();
-    for(ItemCount i = 0 ; i < k ; ++i) {
+    for (ItemCount i = 0 ; i < k ; ++i) {
         MIDIEndpointRef device = MIDIGetSource(i);
         MIDIObjectGetStringProperty(device, kMIDIPropertyDisplayName, &S);
         if (S) v.push_back(toStr(S));
@@ -250,7 +250,7 @@ str_type CMidiMacOSX::MidiOutOpen(int n)
 
 str_type CMidiMacOSX::MidiOutOpen(const char_type* name)
 {
-    if(CurrentOutName() == name) return CurrentOutName();
+    if (CurrentOutName() == name) return CurrentOutName();
     if (fromUtf8(DefaultOut) == name) {
         SetOut(new CMidiOutSW());
         return CurrentOutName();
@@ -266,7 +266,7 @@ str_type CMidiMacOSX::MidiOutOpen(const char_type* name)
         MIDIObjectGetStringProperty(dest, kMIDIPropertyDisplayName, &S);
         if (toStr(S) == name) break;
     }
-    if(i == k) return CurrentOutName();
+    if (i == k) return CurrentOutName();
 
     if (!midi) MIDIClientCreate(CFSTR("Midi"), 0, 0, &midi);
     MIDIOutputPortCreate(midi,CFSTR("port"), &port);
@@ -332,7 +332,7 @@ str_type CMidiMacOSX::MidiInOpen(const char_type* name, void* p)
     for (i = 0; i < k; ++i) {
         src = MIDIGetSource(i);
         MIDIObjectGetStringProperty(src, kMIDIPropertyDisplayName, &S);
-        if(toStr(S) == name) break;
+        if (toStr(S) == name) break;
     }
     if (i == k) return CurrentInName();
     if (!midi) MIDIClientCreate(CFSTR("Midi"), 0, 0, &midi);
@@ -358,6 +358,6 @@ void* ThreadWrapper(void* p)
 }
 
 
-void CMidiMacOSX::StartThread(void(*func)(CMidi*)){ pthread_t t; pthread_create(&t, 0, ThreadWrapper, new ThreadParam(func,this));}
+void CMidiMacOSX::StartThread(void(*func)(CMidi*)) { pthread_t t; pthread_create(&t, 0, ThreadWrapper, new ThreadParam(func,this)); }
 
-void CMidiMacOSX::Sleep(int ms){ usleep(ms);}
+void CMidiMacOSX::Sleep(int ms) { usleep(ms); }

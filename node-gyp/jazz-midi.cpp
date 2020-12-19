@@ -594,7 +594,7 @@ napi_value OnConnectMidiIn(napi_env env, napi_callback_info args)
             XX (napi_create_reference(env, argv[0], 1, &*MI.InOnCall));
             connect_thread(env);
         }
-	MI.DI->OnConnect(CMidiConn::InOn, true);
+        MI.DI->OnConnect(CMidiConn::InOn, true);
     }
     else {
         if (MI.InOnCall) {
@@ -602,7 +602,7 @@ napi_value OnConnectMidiIn(napi_env env, napi_callback_info args)
             disconnect_thread(env);
             MI.InOnCall.reset();
         }
-	MI.DI->OnConnect(CMidiConn::InOn, false);
+        MI.DI->OnConnect(CMidiConn::InOn, false);
     }
     XX (napi_get_undefined(env, &value));
     return value;
@@ -627,7 +627,7 @@ napi_value OnConnectMidiOut(napi_env env, napi_callback_info args)
             XX (napi_create_reference(env, argv[0], 1, &*MI.OutOnCall));
             connect_thread(env);
         }
-	MI.DI->OnConnect(CMidiConn::OutOn, true);
+        MI.DI->OnConnect(CMidiConn::OutOn, true);
     }
     else {
         if (MI.OutOnCall) {
@@ -635,7 +635,7 @@ napi_value OnConnectMidiOut(napi_env env, napi_callback_info args)
             disconnect_thread(env);
             MI.OutOnCall.reset();
         }
-	MI.DI->OnConnect(CMidiConn::OutOn, false);
+        MI.DI->OnConnect(CMidiConn::OutOn, false);
     }
     XX (napi_get_undefined(env, &value));
     return value;
@@ -660,7 +660,7 @@ napi_value OnDisconnectMidiIn(napi_env env, napi_callback_info args)
             XX (napi_create_reference(env, argv[0], 1, &*MI.InOffCall));
             connect_thread(env);
         }
-	MI.DI->OnConnect(CMidiConn::InOff, true);
+        MI.DI->OnConnect(CMidiConn::InOff, true);
     }
     else {
         if (MI.InOffCall) {
@@ -668,7 +668,7 @@ napi_value OnDisconnectMidiIn(napi_env env, napi_callback_info args)
             disconnect_thread(env);
             MI.InOnCall.reset();
         }
-	MI.DI->OnConnect(CMidiConn::InOff, false);
+        MI.DI->OnConnect(CMidiConn::InOff, false);
     }
     XX (napi_get_undefined(env, &value));
     return value;
@@ -693,7 +693,7 @@ napi_value OnDisconnectMidiOut(napi_env env, napi_callback_info args)
             XX (napi_create_reference(env, argv[0], 1, &*MI.OutOffCall));
             connect_thread(env);
         }
-	MI.DI->OnConnect(CMidiConn::OutOff, true);
+        MI.DI->OnConnect(CMidiConn::OutOff, true);
     }
     else {
         if (MI.OutOffCall) {
@@ -701,7 +701,7 @@ napi_value OnDisconnectMidiOut(napi_env env, napi_callback_info args)
             disconnect_thread(env);
             MI.InOnCall.reset();
         }
-	MI.DI->OnConnect(CMidiConn::OutOff, false);
+        MI.DI->OnConnect(CMidiConn::OutOff, false);
     }
     XX (napi_get_undefined(env, &value));
     return value;

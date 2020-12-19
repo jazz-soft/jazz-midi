@@ -6,7 +6,8 @@
 #include <sstream>
 
 std::vector<std::wstring> GetInfo(void*p)
-{	std::vector<std::wstring> v;
+{
+    std::vector<std::wstring> v;
     MIDIOUTCAPS2* cap = (MIDIOUTCAPS2*)p;
     v.push_back(cap->szPname);
 
@@ -17,15 +18,15 @@ std::vector<std::wstring> GetInfo(void*p)
     kname+=olestr;
     ::CoTaskMemFree(olestr);
     HKEY hKey;
-    if(ERROR_SUCCESS==RegOpenKeyExW(HKEY_LOCAL_MACHINE, kname.c_str(), 0, KEY_READ, &hKey))
-    {	WCHAR szBuffer[512];
+    if (ERROR_SUCCESS==RegOpenKeyExW(HKEY_LOCAL_MACHINE, kname.c_str(), 0, KEY_READ, &hKey)) {
+        WCHAR szBuffer[512];
         DWORD dwBufferSize = sizeof(szBuffer);
-        if(ERROR_SUCCESS==RegQueryValueExW(hKey, L"Name", 0, NULL, (LPBYTE)szBuffer, &dwBufferSize)) man=szBuffer;
+        if (ERROR_SUCCESS==RegQueryValueExW(hKey, L"Name", 0, NULL, (LPBYTE)szBuffer, &dwBufferSize)) man=szBuffer;
         RegCloseKey(hKey);
     }
-    if(man.empty())
-    {	switch(cap->wMid)
-        {	case MM_MICROSOFT:	man=L"Microsoft Corporation"; break;
+    if (man.empty()) {
+        switch(cap->wMid) {
+            case MM_MICROSOFT:	man=L"Microsoft Corporation"; break;
             case MM_CREATIVE:	man=L"Creative Labs, Inc."; break;
             case MM_MEDIAVISION:	man=L"Media Vision, Inc."; break;
             case MM_FUJITSU:	man=L"Fujitsu Corp."; break;

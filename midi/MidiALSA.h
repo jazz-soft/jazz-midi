@@ -4,10 +4,10 @@ class CMidiLockLnx : public CMidiLock
 {
     pthread_mutex_t m_Mx;
 public:
-    CMidiLockLnx(){ pthread_mutex_init(&m_Mx, 0);}
-    ~CMidiLockLnx(){ pthread_mutex_destroy(&m_Mx);}
-    void Lock(){ pthread_mutex_lock(&m_Mx);}
-    void Unlock(){ pthread_mutex_unlock(&m_Mx);}
+    CMidiLockLnx() { pthread_mutex_init(&m_Mx, 0); }
+    ~CMidiLockLnx() { pthread_mutex_destroy(&m_Mx); }
+    void Lock() { pthread_mutex_lock(&m_Mx); }
+    void Unlock() { pthread_mutex_unlock(&m_Mx); }
 };
 
 struct CAlsaEntry
@@ -17,8 +17,8 @@ struct CAlsaEntry
     int C, P;
     CAlsaEntry(const std::string&s, const std::string&m, int c, int p) : S(s), M(m), C(c), P(p) {}
     str_type Name() const;
-    str_type Manufacturer() const { return fromUtf8(M);}
-    str_type Version() const { return fromUtf8("0.0");}
+    str_type Manufacturer() const { return fromUtf8(M); }
+    str_type Version() const { return fromUtf8("0.0"); }
     bool operator<(const CAlsaEntry&) const;
 };
 
@@ -29,17 +29,17 @@ class CMidiALSA : public CMidi
     pthread_mutex_t m_ConnDeqMx;
 public:
     timeval m_StartTime;
-    CMidiALSA(void*p) : CMidi(p)
-    {   gettimeofday(&m_StartTime, 0);
+    CMidiALSA(void*p) : CMidi(p) {
+        gettimeofday(&m_StartTime, 0);
         pthread_mutex_init(&m_DeqMx, 0); pthread_mutex_init(&m_ConnDeqMx, 0);
         snd_seq_open(&m_Seq, "default", SND_SEQ_OPEN_DUPLEX, 0);
     }
-    ~CMidiALSA()
-    {	MidiInClose(); MidiOutClose(); ClearDeq();
+    ~CMidiALSA() {
+        MidiInClose(); MidiOutClose(); ClearDeq();
         snd_seq_close(m_Seq);
         pthread_mutex_destroy(&m_DeqMx); pthread_mutex_destroy(&m_ConnDeqMx);
     }
-    unsigned long Time(){ timeval t; gettimeofday(&t, 0); unsigned long z = (t.tv_sec-m_StartTime.tv_sec)*1000; z += (t.tv_usec-m_StartTime.tv_usec)/1000; return z;}
+    unsigned long Time() { timeval t; gettimeofday(&t, 0); unsigned long z = (t.tv_sec-m_StartTime.tv_sec)*1000; z += (t.tv_usec-m_StartTime.tv_usec)/1000; return z; }
     int MidiOut(unsigned char,unsigned char,unsigned char);
     std::vector<str_type> MidiOutList();
     std::vector<str_type> MidiInList();
@@ -51,14 +51,14 @@ public:
     str_type MidiOutOpen(const char_type*);
     str_type MidiInOpen(int,void*);
     str_type MidiInOpen(const char_type*,void*);
-    void LockDeq(){ pthread_mutex_lock(&m_DeqMx);}
-    void UnlockDeq(){ pthread_mutex_unlock(&m_DeqMx);}
-    void LockConnDeq(){ pthread_mutex_lock(&m_ConnDeqMx);}
-    void UnlockConnDeq(){ pthread_mutex_unlock(&m_ConnDeqMx);}
+    void LockDeq() { pthread_mutex_lock(&m_DeqMx); }
+    void UnlockDeq() { pthread_mutex_unlock(&m_DeqMx); }
+    void LockConnDeq() { pthread_mutex_lock(&m_ConnDeqMx); }
+    void UnlockConnDeq() { pthread_mutex_unlock(&m_ConnDeqMx); }
     void StartThread(void(*)(CMidi*));
     void Sleep(int);
     std::vector<CAlsaEntry> ListAll(bool in);
-    CMidiLock* CreateLock(){ return new CMidiLockLnx;}
+    CMidiLock* CreateLock() { return new CMidiLockLnx; }
 };
 
 class CMidiOutHW : public CMidiOut

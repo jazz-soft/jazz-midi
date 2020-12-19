@@ -28,11 +28,11 @@ bool CMidiOut::MidiOutLong(const std::basic_string<unsigned char>& data)
         if (i) buff = buff.substr(i);
         if (!buff.length()) break;
         unsigned char status = buff[0] & 0xf0;
-        if(buff[0] >= 0xf4)	{
+        if (buff[0] >= 0xf4)	{
             ret |= MidiOutMsg(buff.substr(0, 1));
             buff = buff.substr(1);
         }
-        else if(buff[0] == 0xf1 || buff[0] == 0xf3 || status == 0xc0 || status == 0xd0) {
+        else if (buff[0] == 0xf1 || buff[0] == 0xf3 || status == 0xc0 || status == 0xd0) {
             if (buff.length() < 2) return ret;
             if (buff[1] & 0x80) buff = buff.substr(1);
             else {
@@ -40,7 +40,7 @@ bool CMidiOut::MidiOutLong(const std::basic_string<unsigned char>& data)
                 buff = buff.substr(2);
             }
         }
-        else if(buff[0] == 0xf2 || status == 0xe0) {
+        else if (buff[0] == 0xf2 || status == 0xe0) {
             if (buff.length() < 3) return ret;
             if (buff[1] & 0x80) buff = buff.substr(1);
             else if (buff[2] & 0x80) buff = buff.substr(2);
@@ -49,7 +49,7 @@ bool CMidiOut::MidiOutLong(const std::basic_string<unsigned char>& data)
                 buff = buff.substr(3);
             }
         }
-        else if(status == 0x80 || status == 0x90 || status == 0xa0 || status == 0xb0) {
+        else if (status == 0x80 || status == 0x90 || status == 0xa0 || status == 0xb0) {
             if (buff.length() < 3) return ret;
             if (buff[1] & 0x80) buff = buff.substr(1);
             else if (buff[2] & 0x80) buff = buff.substr(2);

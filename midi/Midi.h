@@ -17,9 +17,9 @@ class CMidiIn
 friend class CMidi;
 protected:
     str_type name;
-    virtual ~CMidiIn(){}
+    virtual ~CMidiIn() {}
     virtual void ReadMidiInput(void*, std::vector<unsigned char>&) = 0;
-    virtual void Start(){};
+    virtual void Start() {};
 public:
     static bool Push(unsigned char, std::vector<unsigned char>&, unsigned char&);
 };
@@ -31,12 +31,12 @@ friend class CMidi;
 protected:
     str_type name;
     std::basic_string<unsigned char> buff;
-    virtual ~CMidiOut(){}
+    virtual ~CMidiOut() {}
     virtual void MidiOut(unsigned char, unsigned char, unsigned char);
     virtual bool MidiOutLong(const std::basic_string<unsigned char>&);
     virtual bool MidiOutRaw(const std::basic_string<unsigned char>&);
     virtual bool MidiOutMsg(const std::basic_string<unsigned char>&) = 0;
-    virtual void Stop(){ for (unsigned char c = 0xb0; c< 0xc0; c++) MidiOut(c, 123, 0);}	// all notes off
+    virtual void Stop() { for (unsigned char c = 0xb0; c< 0xc0; c++) MidiOut(c, 123, 0); }	// all notes off
 };
 
 
@@ -76,7 +76,7 @@ public:
     CMidi(void*p) : Owner(p), In(0), Out(0), m_Rec(0),
         m_OutOn(0), m_OutOff(0), m_InOn(0), m_InOff(0),
         p_StopConnectThread(0), p_ConnectThreadLock(0) {}
-    virtual ~CMidi(){ if(p_StopConnectThread) *p_StopConnectThread=true;}
+    virtual ~CMidi() { if (p_StopConnectThread) *p_StopConnectThread=true; }
     virtual std::vector<str_type> MidiOutList() = 0;
     virtual std::vector<str_type> MidiInList() = 0;
     virtual std::vector<str_type> MidiOutInfo(int) = 0;

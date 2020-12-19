@@ -10,4 +10,4 @@ Install: `npm install`
 Manual rebuild: `node-gyp rebuild`
 
 If you make a build for the system that has not been covered yet,
-please consider adding the binary to the [main module](https://github.com/jazz-soft/jazz-midi/tree/master/node)!
+please consider adding your binary to the [main module](https://github.com/jazz-soft/jazz-midi/tree/master/node)!

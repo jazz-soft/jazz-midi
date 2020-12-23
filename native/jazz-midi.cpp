@@ -111,7 +111,7 @@ int main()
         if (ttt.empty()) continue;
         string& str = ttt[0].S;
 
-        if (str == "version") SendMsg("[\"version\"," + Quote(JAZZ_VERSION) + "]");
+        if (str == "version") SendMsg("[\"version\"," + Quote(VERSION) + "]");
         else if (str == "refresh") {
             string s = "[\"refresh\",{\"ins\":[";
             for (size_t i = 0; ; i++) {

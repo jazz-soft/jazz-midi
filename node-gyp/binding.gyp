@@ -10,7 +10,7 @@
         [
           "OS=='win'",
           {
-            "sources": ["../midi/MidiWin32n.cpp", "../midi/MidiInfoWin32.cpp"],
+            "sources": ["../midi/MidiWin32.cpp", "../midi/MidiInfoWin32.cpp"],
             "defines": ["UNICODE"],
             "libraries": ["-lWinmm.lib"]
           }

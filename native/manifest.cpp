@@ -7,10 +7,6 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
-    ofstream log("C:\\tmp\\install.txt", ios::out);
-    //log << argc << "\n";
-    //for (int i = 0; i < argc; i++) log << argv[i] << "\n";
-
     if (argc != 3) return 1;
     string src = argv[2];
     string path;

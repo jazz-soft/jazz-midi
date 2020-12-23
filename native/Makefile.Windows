@@ -1,0 +1,6 @@
+all: jazz-midi.exe manifest.exe
+
+jazz-midi.exe: jazz-midi.cpp ../midi/Midi.cpp ../midi/MidiInfoWin32.cpp ../midi/MidiWin32.cpp
+	cl /Fe:$@ /DUNICODE $** Winmm.lib user32.lib advapi32.lib ole32.lib
+
+manifest.exe: manifest.cpp

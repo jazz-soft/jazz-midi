@@ -18,7 +18,8 @@ union ULen
 };
 
 string ReadMsg()
-{	string s;
+{
+    string s;
     ULen len; len.n = 0;
     for (size_t i = 0; i < 4; i++) {
         int n = getchar();

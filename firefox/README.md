@@ -1,4 +1,4 @@
-# Extensions for Firefox, Chrome, Opera, Edge (Chrome)
+# Extensions for Firefox, Chrome, Opera, Edge (Chromium)
 
 ## jazz-midi
 

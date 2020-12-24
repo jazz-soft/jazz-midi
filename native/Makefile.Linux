@@ -1,0 +1,4 @@
+SRC = jazz-midi.cpp ../midi/Midi.cpp ../midi/MidiALSA.cpp
+
+jazz-midi: $(SRC)
+	g++ -o $@ $(SRC) -std=c++11 -lpthread -lasound

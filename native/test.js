@@ -1,7 +1,7 @@
 const child = require('child_process');
 const readline = require('readline');
 
-const app = child.spawn('jazz-midi');
+const app = child.spawn('./jazz-midi');
 
 app.stdout.on('data', function(data) { console.log('<= ', decode(data.toString())); });
 app.stderr.on('data', function(data) { console.error('<! ', data.toString()); });

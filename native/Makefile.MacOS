@@ -1,0 +1,7 @@
+SRC = jazz-midi.cpp ../midi/Midi.cpp ../midi/MidiMacOSX.cpp
+
+jazz-midi: $(SRC)
+	g++ -o $@ $(SRC) -framework CoreMIDI -framework AudioUnit -framework AudioToolbox -framework CoreFoundation
+
+#g++ -o $@ $(SRC) -framework CoreMIDI -framework AudioUnit -framework AudioToolbox
+#-std=c++11 -lpthread -lasound

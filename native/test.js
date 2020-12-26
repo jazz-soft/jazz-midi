@@ -1,9 +1,10 @@
 const child = require('child_process');
 const readline = require('readline');
 
-const app = child.spawn('./jazz-midi');
+var buff = Buffer.alloc(0);
 
-app.stdout.on('data', function(data) { console.log('<= ', decode(data.toString())); });
+const app = child.spawn('./jazz-midi');
+app.stdout.on('data', read);
 app.stderr.on('data', function(data) { console.error('<! ', data.toString()); });
 app.on('close', function(code) { console.log('child process exited with code', code); });
 
@@ -25,9 +26,15 @@ function encode(s) {
     String.fromCharCode((len >> 16) & 0xff) + String.fromCharCode((len >> 24) & 0xff) + s;
 }
 
-function decode(s) {
-  var len = s.charCodeAt(0) + s.charCodeAt(1) * 0x100 + s.charCodeAt(2) * 0x10000 + s.charCodeAt(3) * 0x1000000;
-  s = s.substr(4);
-  if (len != s.length) console.log('Warning:', len, '!=', s.length);
-  return s;
+function read(data) {
+  var len;
+  var str;
+  buff = Buffer.concat([buff, data]);
+  while (buff.length >= 4) {
+    len = buff[0] + buff[1] * 0x100 + buff[2] * 0x10000 + buff[3] * 0x1000000 + 4;
+    if (buff.length < len) break;
+    str = buff.subarray(4, len);
+    buff = buff.subarray(len);
+    console.log('<=', str.toString());
+  }
 }

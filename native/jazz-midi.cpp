@@ -157,18 +157,6 @@ int main()
         }
         else if (str == "closeout") Midi->MidiOutClose();
         else if (str == "closein") Midi->MidiInClose();
-        else if (str == "watch") {
-            Midi->OnConnect(CMidiConn::OutOn, true);
-            Midi->OnConnect(CMidiConn::OutOff, true);
-            Midi->OnConnect(CMidiConn::InOn, true);
-            Midi->OnConnect(CMidiConn::InOff, true);
-        }
-        else if (str == "unwatch") {
-            Midi->OnConnect(CMidiConn::OutOn, false);
-            Midi->OnConnect(CMidiConn::OutOff, false);
-            Midi->OnConnect(CMidiConn::InOn, false);
-            Midi->OnConnect(CMidiConn::InOff, false);
-        }
     }
 }
 
@@ -181,9 +169,4 @@ void PluginCallback(void* dummy, void* ptr)
     for (size_t i = 0; i<v.size(); i++) s << "," << (unsigned int)v[i];
     s << "]";
     SendMsg(s.str());
-}
-
-void PluginConnCallback(void*)
-{
-    SendMsg("[\"connection\"]");
 }

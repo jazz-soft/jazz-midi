@@ -90,10 +90,6 @@ napi_value Support(napi_env env, napi_callback_info args)
         "MidiOutLong",
         "MidiOutOpen",
         "MidiOutRaw",
-        "OnConnectMidiIn",
-        "OnConnectMidiOut",
-        "OnDisconnectMidiIn",
-        "OnDisconnectMidiOut",
         "QueryMidiIn",
         "Support",
         "Time"
@@ -567,147 +563,6 @@ napi_value ClearMidiIn(napi_env env, napi_callback_info args)
     return value;
 }
 
-//// MIDI Connections
-
-void PluginConnCallback(void* inst)
-{
-    CEvent* Evt = new CEvent();
-    napi_call_threadsafe_function(TSF, Evt, napi_tsfn_nonblocking);
-}
-
-napi_value OnConnectMidiIn(napi_env env, napi_callback_info args)
-{
-    size_t argc = 1;
-    napi_value argv[1];
-    napi_value value;
-    XX (napi_get_cb_info(env, args, &argc, argv, 0, 0));
-    if (argc) {
-        napi_valuetype type;
-        XX (napi_typeof(env, argv[0], &type));
-        if (type != napi_function) napi_throw_type_error(env, err_midi_callback, err_expected_function);
-        if (MI.InOnCall) {
-            XX (napi_delete_reference(env, *MI.InOnCall));
-            XX (napi_create_reference(env, argv[0], 1, &*MI.InOnCall));
-        }
-        else {
-            MI.InOnCall.reset(new napi_ref);
-            XX (napi_create_reference(env, argv[0], 1, &*MI.InOnCall));
-            connect_thread(env);
-        }
-        MI.DI->OnConnect(CMidiConn::InOn, true);
-    }
-    else {
-        if (MI.InOnCall) {
-            XX (napi_delete_reference(env, *MI.InOnCall));
-            disconnect_thread(env);
-            MI.InOnCall.reset();
-        }
-        MI.DI->OnConnect(CMidiConn::InOn, false);
-    }
-    XX (napi_get_undefined(env, &value));
-    return value;
-}
-
-napi_value OnConnectMidiOut(napi_env env, napi_callback_info args)
-{
-    size_t argc = 1;
-    napi_value argv[1];
-    napi_value value;
-    XX (napi_get_cb_info(env, args, &argc, argv, 0, 0));
-    if (argc) {
-        napi_valuetype type;
-        XX (napi_typeof(env, argv[0], &type));
-        if (type != napi_function) napi_throw_type_error(env, err_midi_callback, err_expected_function);
-        if (MI.OutOnCall) {
-            XX (napi_delete_reference(env, *MI.OutOnCall));
-            XX (napi_create_reference(env, argv[0], 1, &*MI.OutOnCall));
-        }
-        else {
-            MI.OutOnCall.reset(new napi_ref);
-            XX (napi_create_reference(env, argv[0], 1, &*MI.OutOnCall));
-            connect_thread(env);
-        }
-        MI.DI->OnConnect(CMidiConn::OutOn, true);
-    }
-    else {
-        if (MI.OutOnCall) {
-            XX (napi_delete_reference(env, *MI.OutOnCall));
-            disconnect_thread(env);
-            MI.OutOnCall.reset();
-        }
-        MI.DI->OnConnect(CMidiConn::OutOn, false);
-    }
-    XX (napi_get_undefined(env, &value));
-    return value;
-}
-
-napi_value OnDisconnectMidiIn(napi_env env, napi_callback_info args)
-{
-    size_t argc = 1;
-    napi_value argv[1];
-    napi_value value;
-    XX (napi_get_cb_info(env, args, &argc, argv, 0, 0));
-    if (argc) {
-        napi_valuetype type;
-        XX (napi_typeof(env, argv[0], &type));
-        if (type != napi_function) napi_throw_type_error(env, err_midi_callback, err_expected_function);
-        if (MI.InOffCall) {
-            XX (napi_delete_reference(env, *MI.InOffCall));
-            XX (napi_create_reference(env, argv[0], 1, &*MI.InOffCall));
-        }
-        else {
-            MI.InOffCall.reset(new napi_ref);
-            XX (napi_create_reference(env, argv[0], 1, &*MI.InOffCall));
-            connect_thread(env);
-        }
-        MI.DI->OnConnect(CMidiConn::InOff, true);
-    }
-    else {
-        if (MI.InOffCall) {
-            XX (napi_delete_reference(env, *MI.InOffCall));
-            disconnect_thread(env);
-            MI.InOnCall.reset();
-        }
-        MI.DI->OnConnect(CMidiConn::InOff, false);
-    }
-    XX (napi_get_undefined(env, &value));
-    return value;
-}
-
-napi_value OnDisconnectMidiOut(napi_env env, napi_callback_info args)
-{
-    size_t argc = 1;
-    napi_value argv[1];
-    napi_value value;
-    XX (napi_get_cb_info(env, args, &argc, argv, 0, 0));
-    if (argc) {
-        napi_valuetype type;
-        XX (napi_typeof(env, argv[0], &type));
-        if (type != napi_function) napi_throw_type_error(env, err_midi_callback, err_expected_function);
-        if (MI.OutOffCall) {
-            XX (napi_delete_reference(env, *MI.OutOffCall));
-            XX (napi_create_reference(env, argv[0], 1, &*MI.OutOffCall));
-        }
-        else {
-            MI.OutOffCall.reset(new napi_ref);
-            XX (napi_create_reference(env, argv[0], 1, &*MI.OutOffCall));
-            connect_thread(env);
-        }
-        MI.DI->OnConnect(CMidiConn::OutOff, true);
-    }
-    else {
-        if (MI.OutOffCall) {
-            XX (napi_delete_reference(env, *MI.OutOffCall));
-            disconnect_thread(env);
-            MI.InOnCall.reset();
-        }
-        MI.DI->OnConnect(CMidiConn::OutOff, false);
-    }
-    XX (napi_get_undefined(env, &value));
-    return value;
-}
-
-
 //// MIDI object
 
 napi_ref MIDI_ctor;
@@ -755,10 +610,6 @@ napi_value init(napi_env env, napi_value exports)
         STATIC_FUNC(MidiOutLong),
         STATIC_FUNC(MidiOutOpen),
         STATIC_FUNC(MidiOutRaw),
-        STATIC_FUNC(OnConnectMidiIn),
-        STATIC_FUNC(OnConnectMidiOut),
-        STATIC_FUNC(OnDisconnectMidiIn),
-        STATIC_FUNC(OnDisconnectMidiOut),
         STATIC_FUNC(QueryMidiIn),
         STATIC_FUNC(Support),
         STATIC_FUNC(Time)
@@ -777,10 +628,6 @@ napi_value init(napi_env env, napi_value exports)
     EXPORT_FUNC(MidiInList);
     EXPORT_FUNC(MidiOutInfo);
     EXPORT_FUNC(MidiOutList);
-    EXPORT_FUNC(OnConnectMidiIn);
-    EXPORT_FUNC(OnConnectMidiOut);
-    EXPORT_FUNC(OnDisconnectMidiIn);
-    EXPORT_FUNC(OnDisconnectMidiOut);
     EXPORT_FUNC(Support);
     EXPORT_FUNC(Time);
     return exports;

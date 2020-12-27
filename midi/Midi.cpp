@@ -124,8 +124,8 @@ void CMidi::OnConnect(CMidiConn::Type T, bool enable)
     }
 }
 
-
-void PluginConnCallback(void*);
+// TODO: remove the whole section
+void PluginConnCallback(void*) {}
 
 
 void CMidi::OnConnectThread(CMidi* self)

@@ -1,8 +1,12 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include <iostream>
 #include <string>
 #include <sstream>
+
+#ifdef _WIN32
+#include <fcntl.h>
+#include <io.h>
+#endif
+
 #include "../midi/Midi.h"
 #include "../midi/version.h"
 
@@ -20,14 +24,15 @@ union ULen
 string ReadMsg()
 {
     string s;
+    unsigned char c;
     ULen len; len.n = 0;
     for (size_t i = 0; i < 4; i++) {
-        int n = getchar();
+        int n = cin.get();
         if (n == EOF) exit(0);
         len.c[i] = (unsigned char)n;
     }
     for (size_t i = 0; i < len.n; i++) {
-        int n = getchar();
+        int n = cin.get();
         if (n == EOF) exit(0);
         s += (unsigned char)n;
     }
@@ -39,9 +44,9 @@ void SendMsg(string s)
     ULen len;
     len.n = s.length();
     Lock->Lock();
-    for (size_t i = 0; i < 4; i++) putchar(len.c[i]);
-    for (size_t i = 0; i < s.length(); i++) putchar(s[i]);
-    fflush(stdout);
+    for (size_t i = 0; i < 4; i++) cout.put(len.c[i]);
+    for (size_t i = 0; i < s.length(); i++) cout.put(s[i]);
+    cout.flush();
     Lock->Unlock();
 }
 
@@ -103,6 +108,10 @@ vector<CToken> Tokenize(const string& s)
 
 int main()
 {
+#ifdef _WIN32
+    _setmode(_fileno(stdin), _O_BINARY);
+    _setmode(_fileno(stdout), _O_BINARY);
+#endif
     string req;
     Midi = CMidi::CreateMidi(0);
     Lock = Midi->CreateLock();
@@ -143,7 +152,7 @@ int main()
         }
         else if (str == "play") {
             basic_string<unsigned char> v;
-            for (size_t i = 1; i<ttt.size(); i++) v.push_back((unsigned char)ttt[i].N);
+            for (size_t i = 1; i < ttt.size(); i++) v.push_back((unsigned char)ttt[i].N);
             Midi->MidiOutRaw(v);
         }
         else if (str == "closeout") Midi->MidiOutClose();

@@ -25,19 +25,15 @@ struct CAlsaEntry
 class CMidiALSA : public CMidi
 {
     snd_seq_t* m_Seq;
-    pthread_mutex_t m_DeqMx;
-    pthread_mutex_t m_ConnDeqMx;
 public:
     timeval m_StartTime;
     CMidiALSA(void*p) : CMidi(p) {
         gettimeofday(&m_StartTime, 0);
-        pthread_mutex_init(&m_DeqMx, 0); pthread_mutex_init(&m_ConnDeqMx, 0);
         snd_seq_open(&m_Seq, "default", SND_SEQ_OPEN_DUPLEX, 0);
     }
     ~CMidiALSA() {
-        MidiInClose(); MidiOutClose(); ClearDeq();
+        MidiInClose(); MidiOutClose();
         snd_seq_close(m_Seq);
-        pthread_mutex_destroy(&m_DeqMx); pthread_mutex_destroy(&m_ConnDeqMx);
     }
     unsigned long Time() { timeval t; gettimeofday(&t, 0); unsigned long z = (t.tv_sec-m_StartTime.tv_sec)*1000; z += (t.tv_usec-m_StartTime.tv_usec)/1000; return z; }
     int MidiOut(unsigned char,unsigned char,unsigned char);
@@ -51,10 +47,6 @@ public:
     str_type MidiOutOpen(const char_type*);
     str_type MidiInOpen(int,void*);
     str_type MidiInOpen(const char_type*,void*);
-    void LockDeq() { pthread_mutex_lock(&m_DeqMx); }
-    void UnlockDeq() { pthread_mutex_unlock(&m_DeqMx); }
-    void LockConnDeq() { pthread_mutex_lock(&m_ConnDeqMx); }
-    void UnlockConnDeq() { pthread_mutex_unlock(&m_ConnDeqMx); }
     void StartThread(void(*)(CMidi*));
     void Sleep(int);
     std::vector<CAlsaEntry> ListAll(bool in);

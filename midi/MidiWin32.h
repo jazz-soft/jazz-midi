@@ -10,20 +10,10 @@ public:
 
 class CMidiWin32 : public CMidi
 {
-    //HANDLE m_DeqMx;
-    //HANDLE m_ConnDeqMx;
 public:
-    //HWND m_hWnd;
     unsigned long m_StartTime;
-    CMidiWin32(void*p) : CMidi(p) { m_StartTime = timeGetTime();
-// m_DeqMx=CreateMutex(0,0,0);
-// m_ConnDeqMx=CreateMutex(0,0,0);
- }
-    ~CMidiWin32() { MidiInClose(); MidiOutClose();
-// ClearDeq();
-// CloseHandle(m_DeqMx);
-// CloseHandle(m_ConnDeqMx);
- }
+    CMidiWin32(void*p) : CMidi(p) { m_StartTime = timeGetTime(); }
+    ~CMidiWin32() { MidiInClose(); MidiOutClose(); }
     unsigned long Time() { return timeGetTime() - m_StartTime; }
     int MidiOut(unsigned char, unsigned char, unsigned char);
     std::vector<str_type> MidiOutList();
@@ -36,10 +26,6 @@ public:
     str_type MidiOutOpen(const char_type*);
     str_type MidiInOpen(int, void*);
     str_type MidiInOpen(const char_type*, void*);
-    //void LockDeq() { WaitForSingleObject(m_DeqMx,INFINITE); }
-    //void UnlockDeq() { ReleaseMutex(m_DeqMx); }
-    //void LockConnDeq() { WaitForSingleObject(m_ConnDeqMx,INFINITE); }
-    //void UnlockConnDeq() { ReleaseMutex(m_ConnDeqMx); }
     void StartThread(void(*)(CMidi*));
     void Sleep(int);
     CMidiLock* CreateLock() { return new CMidiLockWin; }

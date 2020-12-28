@@ -17,7 +17,6 @@ CMidi* CMidi::CreateMidi(void* p) { return new CMidiMacOSX(p); }
 CMidiMacOSX::CMidiMacOSX(void* p) : CMidi(p), midi(0)
 {
     gettimeofday(&m_StartTime, 0);
-    pthread_mutex_init(&m_DeqMx, 0); pthread_mutex_init(&m_ConnDeqMx, 0);
     //MIDIClientRef client; MIDIClientCreate(CFSTR("hack"), dummy, NULL, &client);
 }
 

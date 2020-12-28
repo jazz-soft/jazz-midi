@@ -36,7 +36,7 @@ protected:
     virtual bool MidiOutLong(const std::basic_string<unsigned char>&);
     virtual bool MidiOutRaw(const std::basic_string<unsigned char>&);
     virtual bool MidiOutMsg(const std::basic_string<unsigned char>&) = 0;
-    virtual void Stop() { for (unsigned char c = 0xb0; c< 0xc0; c++) MidiOut(c, 123, 0); }	// all notes off
+    virtual void Stop() { for (unsigned char c = 0xb0; c < 0xc0; c++) MidiOut(c, 123, 0); }	// all notes off
 };
 
 
@@ -47,13 +47,13 @@ struct CMidiMsg
 };
 
 
-struct CMidiConn
-{
-    enum Type { OutOn, OutOff, InOn, InOff };
-    Type A;
-    str_type S;
-    CMidiConn(Type t, str_type s) : A(t), S(s) {}
-};
+//struct CMidiConn
+//{
+//    enum Type { OutOn, OutOff, InOn, InOff };
+//    Type A;
+//    str_type S;
+//    CMidiConn(Type t, str_type s) : A(t), S(s) {}
+//};
 
 
 class CMidi
@@ -62,21 +62,24 @@ protected:
     void* Owner;
     CMidiIn* In;
     CMidiOut* Out;
-    std::deque<CMidiMsg*> m_Deq;
-    std::deque<CMidiConn*> m_ConnDeq;
-    bool m_Rec;
-    bool m_OutOn, m_OutOff, m_InOn, m_InOff;
+    //std::deque<CMidiMsg*> m_Deq;
+    //std::deque<CMidiConn*> m_ConnDeq;
+    //bool m_Rec;
+    //bool m_OutOn, m_OutOff, m_InOn, m_InOff;
     std::vector<str_type> m_OutList;
     std::vector<str_type> m_InList;
-    volatile bool* p_StopConnectThread;
-    CMidiLock* p_ConnectThreadLock;
+    //volatile bool* p_StopConnectThread;
+    //CMidiLock* p_ConnectThreadLock;
 public:
     static CMidi* CreateMidi(void*);
     static size_t MidiLen(unsigned char);
-    CMidi(void*p) : Owner(p), In(0), Out(0), m_Rec(0),
-        m_OutOn(0), m_OutOff(0), m_InOn(0), m_InOff(0),
-        p_StopConnectThread(0), p_ConnectThreadLock(0) {}
-    virtual ~CMidi() { if (p_StopConnectThread) *p_StopConnectThread=true; }
+    CMidi(void*p) : Owner(p), In(0), Out(0)//, m_Rec(0),
+        //m_OutOn(0), m_OutOff(0), m_InOn(0), m_InOff(0),
+        //p_StopConnectThread(0), p_ConnectThreadLock(0)
+ {}
+    virtual ~CMidi() {
+// if (p_StopConnectThread) *p_StopConnectThread=true;
+ }
     virtual std::vector<str_type> MidiOutList() = 0;
     virtual std::vector<str_type> MidiInList() = 0;
     virtual std::vector<str_type> MidiOutInfo(int) = 0;
@@ -98,23 +101,23 @@ public:
     bool MidiOutLong(const std::basic_string<unsigned char>& s) { return Out ? Out->MidiOutLong(s) : 0; }
     bool MidiOutRaw(const std::basic_string<unsigned char>& s) { return Out ? Out->MidiOutRaw(s) : 0; }
     void ReadMidiInput(void* p, std::vector<unsigned char>& v) { if (In) In->ReadMidiInput(p, v); }
-    void SetRec(bool b) { m_Rec = b; }
-    bool GetRec() { return m_Rec; }
-    CMidiMsg* QueryMidiIn();
-    void OnConnect(CMidiConn::Type, bool);
-    static void OnConnectThread(CMidi*);
+    //void SetRec(bool b) { m_Rec = b; }
+    //bool GetRec() { return m_Rec; }
+    //CMidiMsg* QueryMidiIn();
+    //void OnConnect(CMidiConn::Type, bool);
+    //static void OnConnectThread(CMidi*);
     virtual void StartThread(void(*fun)(CMidi*)) = 0;
     virtual void Sleep(int) = 0;
-    void RecordMidiIn(CMidiMsg*);
-    void ClearDeq();
-    virtual void LockDeq() = 0;
-    virtual void UnlockDeq() = 0;
+    //void RecordMidiIn(CMidiMsg*);
+    //void ClearDeq();
+    //virtual void LockDeq() = 0;
+    //virtual void UnlockDeq() = 0;
 
-    void DrainConnDeq();
-    virtual void LockConnDeq() = 0;
-    virtual void UnlockConnDeq() = 0;
-    CMidiConn* GetConnEvent();
+    //void DrainConnDeq();
+    //virtual void LockConnDeq() = 0;
+    //virtual void UnlockConnDeq() = 0;
+    //CMidiConn* GetConnEvent();
 
     virtual CMidiLock* CreateLock() = 0;
-    void Stop();
+    //void Stop();
 };

@@ -73,7 +73,7 @@ bool CMidiOut::MidiOutLong(const std::basic_string<unsigned char>& data)
     return ret;
 }
 
-
+/*
 CMidiMsg* CMidi::QueryMidiIn()
 {
     CMidiMsg* ret = 0;
@@ -103,7 +103,6 @@ void CMidi::ClearDeq()
     UnlockDeq();
 }
 
-
 void CMidi::OnConnect(CMidiConn::Type T, bool enable)
 {
     if (T == CMidiConn::OutOn && m_OutOn == enable) return;
@@ -123,11 +122,11 @@ void CMidi::OnConnect(CMidiConn::Type T, bool enable)
         p_ConnectThreadLock = 0;
     }
 }
-
+*/
 // TODO: remove the whole section
-void PluginConnCallback(void*) {}
+//void PluginConnCallback(void*) {}
 
-
+/*
 void CMidi::OnConnectThread(CMidi* self)
 {
     volatile bool stop=false;
@@ -206,7 +205,6 @@ void CMidi::DrainConnDeq()
     UnlockConnDeq();
 }
 
-
 void CMidi::Stop()
 {
     if (p_ConnectThreadLock) {
@@ -217,7 +215,7 @@ void CMidi::Stop()
         p_ConnectThreadLock = 0;
     }
 }
-
+*/
 
 size_t CMidi::MidiLen(unsigned char c)
 {

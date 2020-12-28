@@ -19,7 +19,8 @@ public:
     bool ConnListening;
     CStaticMidi() : DI(0), ConnListening(false) { DI = CMidi::CreateMidi(this); }
     ~CStaticMidi() {
-        DI->Stop(); delete DI;
+        //DI->Stop();
+        delete DI;
         InOnCall.reset(); InOffCall.reset(); OutOnCall.reset(); OutOffCall.reset();
     }
 };
@@ -90,7 +91,6 @@ napi_value Support(napi_env env, napi_callback_info args)
         "MidiOutLong",
         "MidiOutOpen",
         "MidiOutRaw",
-        "QueryMidiIn",
         "Support",
         "Time"
     };
@@ -389,28 +389,28 @@ void EventReceived(napi_env env, napi_value js_callback, void* context, void* da
         }
         delete Evt->Msg;
     }
-    else {
-        if (napi_get_undefined(env, &undef)) return;
-        while (CMidiConn* C = MI.DI->GetConnEvent()) {
-            if (C->A == CMidiConn::OutOn && MI.OutOnCall) {
-                if (napi_get_reference_value(env, *MI.OutOnCall, &func)) return;
-                napi_call_function(env, undef, func, 0, 0, &value);
-            }
-            if (C->A == CMidiConn::OutOff && MI.OutOffCall) {
-                if (napi_get_reference_value(env, *MI.OutOffCall, &func)) return;
-                napi_call_function(env, undef, func, 0, 0, &value);
-            }
-            if (C->A == CMidiConn::InOn && MI.InOnCall) {
-                if (napi_get_reference_value(env, *MI.InOnCall, &func)) return;
-                napi_call_function(env, undef, func, 0, 0, &value);
-            }
-            if (C->A == CMidiConn::InOff && MI.InOffCall) {
-                if (napi_get_reference_value(env, *MI.InOffCall, &func)) return;
-                napi_call_function(env, undef, func, 0, 0, &value);
-            }
-            delete C;
-        }
-    }
+    //else {
+        //if (napi_get_undefined(env, &undef)) return;
+        //while (CMidiConn* C = MI.DI->GetConnEvent()) {
+        //    if (C->A == CMidiConn::OutOn && MI.OutOnCall) {
+        //        if (napi_get_reference_value(env, *MI.OutOnCall, &func)) return;
+        //        napi_call_function(env, undef, func, 0, 0, &value);
+        //    }
+        //    if (C->A == CMidiConn::OutOff && MI.OutOffCall) {
+        //        if (napi_get_reference_value(env, *MI.OutOffCall, &func)) return;
+        //        napi_call_function(env, undef, func, 0, 0, &value);
+        //    }
+        //    if (C->A == CMidiConn::InOn && MI.InOnCall) {
+        //        if (napi_get_reference_value(env, *MI.InOnCall, &func)) return;
+        //        napi_call_function(env, undef, func, 0, 0, &value);
+        //    }
+        //    if (C->A == CMidiConn::InOff && MI.InOffCall) {
+        //        if (napi_get_reference_value(env, *MI.InOffCall, &func)) return;
+        //        napi_call_function(env, undef, func, 0, 0, &value);
+        //    }
+        //    delete C;
+        //}
+    //}
     delete Evt;
 }
 
@@ -444,15 +444,15 @@ void PluginCallback(void* inst, void* ptr)
     CMidiMsg* Msg = new CMidiMsg;
     Msg->T = Plg->Midi->Time();
     for (size_t i = 0; i < v.size(); i++) Msg->V.push_back(v[i]);
-    if (Plg->Midi->GetRec()) {
-        Plg->Midi->RecordMidiIn(Msg);
-    }
-    else {
+    //if (Plg->Midi->GetRec()) {
+    //    Plg->Midi->RecordMidiIn(Msg);
+    //}
+    //else {
         CEvent* Evt = new CEvent();
         Evt->Plg = Plg;
         Evt->Msg = Msg;
         napi_call_threadsafe_function(TSF, Evt, napi_tsfn_nonblocking);
-    }
+    //}
 }
 
 napi_value MidiInOpen(napi_env env, napi_callback_info args)
@@ -465,9 +465,9 @@ napi_value MidiInOpen(napi_env env, napi_callback_info args)
     std::string s;
     XX (napi_get_cb_info(env, args, &argc, argv, &self, 0));
     XX (napi_unwrap(env, self, (void**)&Plg));
-    if (argc) {
+    if (argc >= 2) {
         int32_t n;
-        if (argc == 2) {
+        //if (argc == 2) {
             napi_valuetype type;
             XX (napi_typeof(env, argv[1], &type));
             if (type != napi_function) napi_throw_type_error(env, err_midi_callback, err_expected_function);
@@ -481,15 +481,15 @@ napi_value MidiInOpen(napi_env env, napi_callback_info args)
             }
             else Plg->MidiInCall.reset(new napi_ref);
             XX (napi_create_reference(env, argv[1], 1, &*Plg->MidiInCall));
-            Plg->Midi->SetRec(false);
-        }
-        else {
-            if (Plg->MidiInCall) {
-                XX (napi_delete_reference(env, *Plg->MidiInCall));
-                Plg->MidiInCall.reset();
-            }
-            Plg->Midi->SetRec(true);
-        }
+            //Plg->Midi->SetRec(false);
+        //}
+        //else {
+        //    if (Plg->MidiInCall) {
+        //        XX (napi_delete_reference(env, *Plg->MidiInCall));
+        //        Plg->MidiInCall.reset();
+        //    }
+        //    Plg->Midi->SetRec(true);
+        //}
         XX (napi_coerce_to_number(env, argv[0], &value));
         if (read_int32(env, value, &n)) {
             s = toUtf8(Plg->Midi->MidiInOpen(n, Plg));
@@ -531,37 +531,37 @@ napi_value MidiInClose(napi_env env, napi_callback_info args)
     return value;
 }
 
-napi_value QueryMidiIn(napi_env env, napi_callback_info args)
-{
-    napi_value self;
-    napi_value arr;
-    napi_value value;
-    CPlugin* Plg;
-    XX (napi_get_cb_info(env, args, 0, 0, &self, 0));
-    XX (napi_unwrap(env, self, (void**)&Plg));
-    XX (napi_create_array(env, &arr));
-    CMidiMsg* msg = Plg->Midi->QueryMidiIn();
-    if (msg) {
-        for (size_t i = 0; i < msg->V.size(); i++) {
-            XX (napi_create_uint32(env, msg->V[i], &value));
-            XX (napi_set_element(env, arr, i, value));
-        }
-        delete msg;
-    }
-    return arr;
-}
+//napi_value QueryMidiIn(napi_env env, napi_callback_info args)
+//{
+//    napi_value self;
+//    napi_value arr;
+//    napi_value value;
+//    CPlugin* Plg;
+//    XX (napi_get_cb_info(env, args, 0, 0, &self, 0));
+//    XX (napi_unwrap(env, self, (void**)&Plg));
+//    XX (napi_create_array(env, &arr));
+//    CMidiMsg* msg = Plg->Midi->QueryMidiIn();
+//    if (msg) {
+//        for (size_t i = 0; i < msg->V.size(); i++) {
+//            XX (napi_create_uint32(env, msg->V[i], &value));
+//            XX (napi_set_element(env, arr, i, value));
+//        }
+//        delete msg;
+//    }
+//    return arr;
+//}
 
-napi_value ClearMidiIn(napi_env env, napi_callback_info args)
-{
-    napi_value self;
-    napi_value value;
-    CPlugin* Plg;
-    XX (napi_get_cb_info(env, args, 0, 0, &self, 0));
-    XX (napi_unwrap(env, self, (void**)&Plg));
-    Plg->Midi->ClearDeq();
-    XX (napi_get_undefined(env, &value));
-    return value;
-}
+//napi_value ClearMidiIn(napi_env env, napi_callback_info args)
+//{
+//    napi_value self;
+//    napi_value value;
+//    CPlugin* Plg;
+//    XX (napi_get_cb_info(env, args, 0, 0, &self, 0));
+//    XX (napi_unwrap(env, self, (void**)&Plg));
+//    Plg->Midi->ClearDeq();
+//    XX (napi_get_undefined(env, &value));
+//    return value;
+//}
 
 //// MIDI object
 
@@ -598,7 +598,7 @@ napi_value init(napi_env env, napi_value exports)
     napi_value value;
 
     napi_property_descriptor Midi[] = {
-        STATIC_FUNC(ClearMidiIn),
+        //STATIC_FUNC(ClearMidiIn),
         STATIC_FUNC(MidiInClose),
         STATIC_FUNC(MidiInInfo),
         STATIC_FUNC(MidiInList),
@@ -610,7 +610,7 @@ napi_value init(napi_env env, napi_value exports)
         STATIC_FUNC(MidiOutLong),
         STATIC_FUNC(MidiOutOpen),
         STATIC_FUNC(MidiOutRaw),
-        STATIC_FUNC(QueryMidiIn),
+        //STATIC_FUNC(QueryMidiIn),
         STATIC_FUNC(Support),
         STATIC_FUNC(Time)
     };

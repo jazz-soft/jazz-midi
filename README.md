@@ -6,6 +6,9 @@ See also: [Web MIDI API](https://github.com/jazz-soft/web-midi)
 ## Node.js
 [![npm](https://img.shields.io/npm/v/jazz-midi.svg)](https://www.npmjs.com/package/jazz-midi)
 
+## Headless
+[![npm](https://img.shields.io/npm/v/jazz-midi-headless.svg)](https://www.npmjs.com/package/jazz-midi-headless)
+
 ## Electron
 [![npm](https://img.shields.io/npm/v/jazz-midi-electron.svg)](https://www.npmjs.com/package/jazz-midi-electron)
 

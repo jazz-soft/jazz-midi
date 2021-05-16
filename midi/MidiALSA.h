@@ -33,7 +33,7 @@ public:
     }
     ~CMidiALSA() {
         MidiInClose(); MidiOutClose();
-        snd_seq_close(m_Seq);
+        if (m_Seq) snd_seq_close(m_Seq);
     }
     unsigned long Time() { timeval t; gettimeofday(&t, 0); unsigned long z = (t.tv_sec-m_StartTime.tv_sec)*1000; z += (t.tv_usec-m_StartTime.tv_usec)/1000; return z; }
     int MidiOut(unsigned char,unsigned char,unsigned char);

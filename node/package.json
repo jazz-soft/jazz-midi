@@ -1,6 +1,6 @@
 {
   "name": "jazz-midi",
-  "version": "1.7.4",
+  "version": "1.7.5",
   "description": "Low-level MIDI support for Node.js",
   "main": "index.js",
   "scripts": {

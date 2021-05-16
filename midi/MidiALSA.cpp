@@ -20,6 +20,7 @@ str_type CAlsaEntry::Name() const
 vector<CAlsaEntry> CMidiALSA::ListAll(bool in)
 {
     vector<CAlsaEntry> E;
+    if (!m_Seq) return E;
     map<string, string> M;
     int card = -1;
     while (!snd_card_next(&card) && card!=-1) {
@@ -333,6 +334,7 @@ str_type CMidiALSA::MidiInOpen(const char_type*name, void* p)
 CMidiInHW::CMidiInHW(snd_seq_t* seq, int client, int port, const char_type* n, void* p)
     : m_Seq(seq), m_C(-1), m_P(-1), plugin(p)
 {
+    if (!m_Seq) return;
     name = n;
     snd_seq_addr_t sender, receiver;
     sender.client = client;
@@ -353,6 +355,7 @@ CMidiInHW::CMidiInHW(snd_seq_t* seq, int client, int port, const char_type* n, v
 
 CMidiInHW::~CMidiInHW()
 {
+    if (!m_Seq) return;
     snd_seq_unsubscribe_port(m_Seq, m_Sub);
     snd_seq_port_subscribe_free(m_Sub);
     snd_seq_delete_port(m_Seq, m_Port);

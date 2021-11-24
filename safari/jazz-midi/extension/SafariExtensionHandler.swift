@@ -15,7 +15,7 @@ class PageData {
       pg.date = now
       pg.page = p
     }
-    pages = pages.filter({ now.timeIntervalSince($0.1.date) < 5 })
+    //pages = pages.filter({ now.timeIntervalSince($0.1.date) < 5 })
   }
   
   static func find(_ id: UInt) -> PageData {

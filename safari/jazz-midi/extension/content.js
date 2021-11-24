@@ -26,14 +26,14 @@ safari.self.addEventListener('message', function(e) {
 });
 
 document.addEventListener('jazz-midi', function(e) {
-  //console.log("### received jazz-midi message:", e.detail);
+  console.log("### received jazz-midi message:", e.detail);
   if (!e.detail) document.dispatchEvent(new Event('jazz-midi-msg'));
   if (!exchange) {
     exchange = document.createElement('div');
     exchange.id = 'jazz-midi-msg';
     document.body.appendChild(exchange);
     safari.extension.dispatchMessage("init", { "data": [0] });
-    setInterval(function() { safari.extension.dispatchMessage("tick", { data: [page] }); }, 500);
+    setInterval(function() { console.log('tick'); safari.extension.dispatchMessage("tick", { data: [page] }); }, 500);
   }
   if (page) {
     var v = e.detail.slice();

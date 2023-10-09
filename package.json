@@ -6,7 +6,7 @@
     "test": "node test.js"
   },
   "devDependencies": {
-    "midi-test": "^1.2.4"
+    "midi-test": "^1.2.7"
   },
   "private": true
 }

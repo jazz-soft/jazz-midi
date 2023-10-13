@@ -332,7 +332,7 @@ str_type CMidiALSA::MidiInOpen(const char_type*name, void* p)
 
 
 CMidiInHW::CMidiInHW(snd_seq_t* seq, int client, int port, const char_type* n, void* p)
-    : m_Seq(seq), m_C(-1), m_P(-1), plugin(p)
+    : m_Seq(seq), m_C(-1), m_P(-1), plugin(p), have_thread(false)
 {
     if (!m_Seq) return;
     name = n;
@@ -349,6 +349,7 @@ CMidiInHW::CMidiInHW(snd_seq_t* seq, int client, int port, const char_type* n, v
         m_C = client; m_P = port;
         pthread_mutex_init(&lock, 0);
         pthread_create(&thread, 0, MidiInThread, this);
+        have_thread = true;
     }
 }
 
@@ -359,10 +360,12 @@ CMidiInHW::~CMidiInHW()
     snd_seq_unsubscribe_port(m_Seq, m_Sub);
     snd_seq_port_subscribe_free(m_Sub);
     snd_seq_delete_port(m_Seq, m_Port);
-    pthread_mutex_lock(&lock);
-    pthread_cancel(thread);
-    pthread_mutex_unlock(&lock);
-    pthread_mutex_destroy(&lock);
+    if(have_thread) {
+        pthread_mutex_lock(&lock);
+        pthread_cancel(thread);
+        pthread_mutex_unlock(&lock);
+        pthread_mutex_destroy(&lock);
+    }
 }
 
 

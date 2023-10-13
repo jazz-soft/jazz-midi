@@ -80,6 +80,7 @@ protected:
     snd_rawmidi_t* handle;
     pthread_mutex_t lock;
     pthread_t thread;
+    bool have_thread;
     CMidiInHW(snd_seq_t* seq, int client, int port, const char_type* n, void* p);
     ~CMidiInHW();
     virtual void ReadMidiInput(void*,std::vector<unsigned char>&);

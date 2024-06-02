@@ -349,7 +349,6 @@ napi_value MidiOutRaw(napi_env env, napi_callback_info args)
 std::map<void*, napi_ref> Callbacks;
 napi_threadsafe_function TSF;
 napi_value MidiThread(napi_env env, napi_callback_info args) { return 0; }
-void FinalizeThread(napi_env env, void* finalize_data, void* finalize_hint) { /* std::cout << "Finalize!!!\n"; */ }
 
 void EventReceived(napi_env env, napi_value js_callback, void* context, void* data)
 {
@@ -397,7 +396,7 @@ void connect_thread(napi_env env)
         napi_value func;
         if (napi_create_function(env, 0, 0, MidiThread, 0, &func)) return;
         if (napi_create_string_utf8(env, "no_name", NAPI_AUTO_LENGTH, &value)) return;
-        if (napi_create_threadsafe_function(env, func, 0, value, 128, 1, 0, FinalizeThread, 0, EventReceived, &TSF)) return;
+        if (napi_create_threadsafe_function(env, func, 0, value, 128, 1, 0, 0, 0, EventReceived, &TSF)) return;
     }
     connect_count++;
 }
@@ -495,7 +494,7 @@ napi_value MidiInClose(napi_env env, napi_callback_info args)
 
 napi_ref MIDI_ctor;
 
-void destroy(napi_env env, void* data, void* hint) { /* std::cout << "delete!\n"; */ delete (CPlugin*)data; }
+void destroy(node_api_nogc_env env, void* data, void* hint) { /* std::cout << "delete!\n"; */ delete (CPlugin*)data; }
 
 napi_value MIDI(napi_env env, napi_callback_info args)
 {

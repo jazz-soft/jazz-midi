@@ -8,7 +8,7 @@
   },
   "devDependencies": {
     "midi-test": "^1.3.1",
-    "mocha": "^10.4.0"
+    "mocha": "^11.1.0"
   },
   "engines": {
     "node": ">=10.0.0"

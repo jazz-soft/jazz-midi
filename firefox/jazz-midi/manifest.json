@@ -1,18 +1,17 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "Jazz-MIDI",
   "description": "MIDI support for browsers",
   "author": "Jazz-Soft",
-  "version": "1.0.2.0",
+  "version": "1.0.3.0",
   "icons": {
     "48": "icon48.png",
     "128": "icon128.png"
   },
   "background": {
-    "scripts": ["background.js"],
-    "persistent": false
+    "service_worker": "background.js"
   },
-  "page_action": {
+  "action": {
     "default_title": "Jazz-MIDI",
     "default_icon": "good19.png",
     "default_popup": "good.html"

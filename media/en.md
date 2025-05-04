@@ -7,13 +7,11 @@ Jazz-MIDI
 MIDI support for browsers
 
 ## Description (Mozilla Add-ons)
-MIDI stands for Musical Instrument Digital Interface.
+Since MIDI is now natively available in major browsers, this extension is no longer mandatory.
 
-This extension will allow web pages communicate with the software synth and musical instruments connected to your computer.
+However, you may want to install it to add Microsoft GS Wavetable Synth on Windows or Apple DLS Synth on Mac.
 
 Please visit https://github.com/jazz-soft/jazz-midi to view the source code and leave your feedback.
-
-See also: &lt;a href=https://addons.mozilla.org/en-US/firefox/addon/web-midi-api&gt;Web MIDI API&lt;/a&gt; extension.
 
 ## Description (Apple App Store)
 MIDI stands for Musical Instrument Digital Interface.

@@ -1,5 +1,6 @@
 #include <Carbon/Carbon.h>
 #include <CoreAudio/CoreAudio.h>
+#include <CoreMIDI/CoreMIDI.h>
 #include <AudioToolbox/AudioToolbox.h>
 #include <sys/time.h>
 #include <sstream>
@@ -127,7 +128,7 @@ std::vector<str_type> CMidiMacOSX::MidiOutList()
     CFStringRef S;
     std::vector<str_type> v;
     v.push_back(fromUtf8(DefaultOut));
-    //CFRunLoopRef ref = CFRunLoopGetCurrent();
+    CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true);
     ItemCount k = MIDIGetNumberOfDestinations();
     for (ItemCount i = 0; i < k; ++i) {
         MIDIEndpointRef device = MIDIGetDestination(i);
@@ -185,6 +186,7 @@ std::vector<str_type> CMidiMacOSX::MidiOutInfo(int n)
 {
     if (!n) return GetDefaultInfo();
     n--;
+    CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true);
     MIDIEndpointRef device = MIDIGetDestination(n);
     if (device) return GetInfo(device);
     return std::vector<str_type>();
@@ -194,6 +196,7 @@ std::vector<str_type> CMidiMacOSX::MidiOutInfo(int n)
 std::vector<str_type> CMidiMacOSX::MidiOutInfo(const char_type* name)
 {
     if (fromUtf8(DefaultOut) == name) return GetDefaultInfo();
+    CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true);
     ItemCount k = MIDIGetNumberOfDestinations();
     CFStringRef S;
     for (size_t i = 0; i < k; ++i) {
@@ -207,6 +210,7 @@ std::vector<str_type> CMidiMacOSX::MidiOutInfo(const char_type* name)
 
 std::vector<str_type> CMidiMacOSX::MidiInInfo(int n)
 {
+    CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true);
     MIDIEndpointRef device = MIDIGetSource(n);
     if (device) return GetInfo(device);
     return std::vector<str_type>();
@@ -215,6 +219,7 @@ std::vector<str_type> CMidiMacOSX::MidiInInfo(int n)
 
 std::vector<str_type> CMidiMacOSX::MidiInInfo(const char_type* name)
 {
+    CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true);
     ItemCount k = MIDIGetNumberOfSources();
     CFStringRef S;
     for (size_t i = 0; i < k; ++i) {
@@ -228,7 +233,8 @@ std::vector<str_type> CMidiMacOSX::MidiInInfo(const char_type* name)
 
 str_type CMidiMacOSX::MidiOutOpen(int n)
 {
-    if (n < 0 || n > MIDIGetNumberOfDestinations()) return CurrentOutName();
+    CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true);
+    if (n < 0 || static_cast<ItemCount>(n) > MIDIGetNumberOfDestinations()) return CurrentOutName();
     if (!n) {
         SetOut(new CMidiOutSW());
         return CurrentOutName();
@@ -249,6 +255,7 @@ str_type CMidiMacOSX::MidiOutOpen(int n)
 
 str_type CMidiMacOSX::MidiOutOpen(const char_type* name)
 {
+    CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true);
     if (CurrentOutName() == name) return CurrentOutName();
     if (fromUtf8(DefaultOut) == name) {
         SetOut(new CMidiOutSW());
@@ -306,7 +313,8 @@ void CMidiInHW::ReadMidiInput(void* data, std::vector<unsigned char>& v)
 
 str_type CMidiMacOSX::MidiInOpen(int n, void* p)
 {
-    if (n < 0 || n >= MIDIGetNumberOfSources()) return CurrentInName();
+    CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true);
+    if (n < 0 || static_cast<ItemCount>(n) >= MIDIGetNumberOfSources()) return CurrentInName();
     CFStringRef S;
     MIDIPortRef port;
     MIDIEndpointRef src=MIDIGetSource(n);
@@ -322,6 +330,7 @@ str_type CMidiMacOSX::MidiInOpen(int n, void* p)
 
 str_type CMidiMacOSX::MidiInOpen(const char_type* name, void* p)
 {
+    CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true);
     if (CurrentInName() == name) return CurrentInName();
     CFStringRef S;
     MIDIPortRef port;
@@ -352,7 +361,6 @@ struct ThreadParam
 
 void* ThreadWrapper(void* p)
 {
-    //CFRunLoopRef ref = CFRunLoopGetCurrent();
     ThreadParam* tp = (ThreadParam*)p; tp->func(tp->ptr); delete tp; return 0;
 }
 

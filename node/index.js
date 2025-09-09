@@ -8,6 +8,7 @@ else if(process.platform=="darwin"&&process.arch=="x64") path+='macos64/jazz';
 else if(process.platform=="darwin"&&process.arch=="arm64") path+='macosa64/jazz';
 else if(process.platform=="linux"&&process.arch=="x64") path+='linux64/jazz';
 else if(process.platform=="linux"&&process.arch=="arm") path+='linuxa7/jazz';
+else if(process.platform=="linux"&&process.arch=="arm64") path+='linuxa8/jazz';
 else throw process.arch + ' on ' + process.platform + ' is not yet supported';
 module.exports=require(path);
 module.exports.package=require(__dirname + '/package.json');
